@@ -104,7 +104,8 @@ class RequestException extends Exception {
       'code' =>
         static::idx($error_data, 'code', static::idx($response_data, 'code')),
       'error_subcode' => static::idx($error_data, 'error_subcode'),
-      'message' => static::idx($error_data, 'message'),
+      'message' => static::idx($error_data, 'error_user_msg') != ''? static::idx($error_data, 'error_user_msg') : static::idx($error_data, 'message') ,
+//      'message' => static::idx($error_data, 'message'),
       'error_user_title' => static::idx($error_data, 'error_user_title'),
       'error_user_msg' => static::idx($error_data, 'error_user_msg'),
       'type' => static::idx($error_data, 'type'),
