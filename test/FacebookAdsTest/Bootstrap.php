@@ -22,12 +22,7 @@
  *
  */
 
-namespace FacebookAds;
-
-use FacebookAdsTest\AbstractTestCase;
-
-error_reporting(E_ALL | E_STRICT);
-chdir(__DIR__);
+namespace FacebookAdsTest;
 
 abstract class Bootstrap {
 
@@ -42,11 +37,6 @@ abstract class Bootstrap {
    * @var array
    */
   private static $config = array();
-
-  public static function init() {
-    self::initAutoloader();
-    self::initConfig();
-  }
 
   /**
    * Simplifies the common pattern of checking for an index in an array
@@ -101,37 +91,40 @@ abstract class Bootstrap {
   /**
    * @throws \RuntimeException
    */
-  private static function initAutoloader() {
+  public static function initAutoloader() {
     $vendor_path = static::findParentPath('vendor');
     if (!$vendor_path || !is_readable($vendor_path . '/autoload.php')) {
       throw new \RuntimeException("Could not read autoload.php");
     }
     self::$loader = include $vendor_path . '/autoload.php';
     self::$loader->addPsr4(
-      'FacebookAdsTest\\', __DIR__.'/FacebookAdsTest/');
+      'FacebookAdsTest\\', __DIR__.'/');
   }
 
   /**
    * @throws \RuntimeException
    */
-  private static function initConfig() {
-    $config_path = __DIR__ . '/config.php';
+  public static function initConfig() {
+    $config_path = dirname(__DIR__).'/config.php';
     if (!is_readable($config_path)) {
       throw new \RuntimeException("Could not read config.php");
     }
 
     self::$config = include $config_path;
-    AbstractTestCase::$appId = self::confxt('app_id');
-    AbstractTestCase::$appSecret = self::confxt('app_secret');
-    AbstractTestCase::$accessToken = self::confxt('access_token');
-    AbstractTestCase::$actId = self::confxt('act_id');
-    AbstractTestCase::$pageId = self::confxt('page_id');
-    AbstractTestCase::$appUrl = self::confxt('app_url');
-    AbstractTestCase::$graphBaseDomain = self::confx('graph_base_domain');
-    AbstractTestCase::$skipSslVerification
+    AbstractIntegrationTestCase::$appId = self::confxt('app_id');
+    AbstractIntegrationTestCase::$appSecret = self::confxt('app_secret');
+    AbstractIntegrationTestCase::$accessToken = self::confxt('access_token');
+    AbstractIntegrationTestCase::$actId = self::confxt('act_id');
+    AbstractIntegrationTestCase::$pageId = self::confxt('page_id');
+    AbstractIntegrationTestCase::$appUrl = self::confxt('app_url');
+    AbstractIntegrationTestCase::$businessManagerId
+      = self::confxt('business_manager_id');
+    AbstractIntegrationTestCase::$graphBaseDomain
+      = self::confx('graph_base_domain');
+    AbstractIntegrationTestCase::$skipSslVerification
       = self::confx('skip_ssl_verification');
     AbstractTestCase::$skipIf = self::confx('skip_if', array());
-    AbstractTestCase::$testRunId = md5(
+    AbstractIntegrationTestCase::$testRunId = md5(
       (isset($_SERVER['LOGNAME']) ? $_SERVER['LOGNAME'] : uniqid(true))
       . microtime(true));
 
@@ -166,5 +159,3 @@ abstract class Bootstrap {
     return $dir.'/'.$path;
   }
 }
-
-Bootstrap::init();

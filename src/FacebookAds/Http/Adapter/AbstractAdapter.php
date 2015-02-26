@@ -46,4 +46,11 @@ abstract class AbstractAdapter implements AdapterInterface {
   public function getClient() {
     return $this->client;
   }
+
+  /**
+   * @return string
+   */
+  public function getCaBundlePath() {
+    return $this->getClient()->getCaBundlePath();
+  }
 }

@@ -39,6 +39,7 @@ class ObjectStorySpec extends AbstractObject {
     ObjectStorySpecFields::PAGE_ID,
     ObjectStorySpecFields::PHOTO_DATA,
     ObjectStorySpecFields::TEXT_DATA,
+    ObjectStorySpecFields::TEMPLATE_DATA,
     ObjectStorySpecFields::VIDEO_DATA,
   );
 }

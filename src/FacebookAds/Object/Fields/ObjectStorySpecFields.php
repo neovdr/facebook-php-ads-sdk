@@ -31,5 +31,6 @@ abstract class ObjectStorySpecFields {
   const PAGE_ID = 'page_id';
   const PHOTO_DATA = 'photo_data';
   const TEXT_DATA = 'text_data';
+  const TEMPLATE_DATA = 'template_data';
   const VIDEO_DATA = 'video_data';
 }
