@@ -1,4 +1,4 @@
-<phpunit bootstrap="Bootstrap.php" colors="true">
+<phpunit bootstrap="init_integration.php" colors="true">
     <testsuites>
         <testsuite name="Facebook AdsAPI PHP SDK">
             <directory>./FacebookAdsTest</directory>

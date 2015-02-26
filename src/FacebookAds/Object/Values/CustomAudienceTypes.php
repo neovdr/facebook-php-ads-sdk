@@ -34,6 +34,11 @@ abstract class CustomAudienceTypes {
   /**
    * @var string
    */
+  const CLAIM = 'CLAIM';
+
+  /**
+   * @var string
+   */
   const EMAIL = 'EMAIL_SHA256';
 
   /**

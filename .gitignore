@@ -1,6 +1,8 @@
+/local
 /vendor
 /composer.lock
 /composer.local.*
 /composer.phar
+/coverage.clover
 .DS_Store
 /.idea

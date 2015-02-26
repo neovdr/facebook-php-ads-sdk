@@ -41,6 +41,22 @@ interface AdapterInterface {
   public function getClient();
 
   /**
+   * @return string
+   */
+  public function getCaBundlePath();
+
+  /**
+   * @return \ArrayObject
+   */
+  public function getOpts();
+
+  /**
+   * @param \ArrayObject $opts
+   * @return void
+   */
+  public function setOpts(\ArrayObject $opts);
+
+  /**
    * @param RequestInterface $request
    * @return ResponseInterface
    */

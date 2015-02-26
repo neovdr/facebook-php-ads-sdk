@@ -43,6 +43,7 @@ class AdCreative extends AbstractCrudObject {
     AdCreativeFields::OBJECT_ID,
     AdCreativeFields::OBJECT_STORY_ID,
     AdCreativeFields::OBJECT_STORY_SPEC,
+    AdCreativeFields::PRODUCT_SET_ID,
     AdCreativeFields::BODY,
     AdCreativeFields::IMAGE_HASH,
     AdCreativeFields::IMAGE_FILE,
