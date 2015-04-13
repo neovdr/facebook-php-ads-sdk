@@ -76,7 +76,6 @@ class AdGroup extends AbstractArchivableCrudObject
     AdGroupFields::CAMPAIGN_GROUP_ID,
     AdGroupFields::CONVERSION_SPECS,
     AdGroupFields::CREATED_TIME,
-    AdGroupFields::CREATIVE_IDS,
     AdGroupFields::FAILED_DELIVERY_CHECKS,
     AdGroupFields::NAME,
     AdGroupFields::TARGETING,
@@ -84,7 +83,6 @@ class AdGroup extends AbstractArchivableCrudObject
     AdGroupFields::UPDATED_TIME,
     AdGroupFields::VIEW_TAGS,
     AdGroupFields::CREATIVE,
-    AdGroupFields::OBJECTIVE,
     AdGroupFields::REDOWNLOAD,
     AdGroupFields::SOCIAL_PREFS,
   );
@@ -192,5 +190,16 @@ class AdGroup extends AbstractArchivableCrudObject
     array $fields = array(), array $params = array()) {
     return $this->getOneByConnection(
       AdStats::className(), $fields, $params, 'conversions');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getInsights(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      Insights::classname(), $fields, $params, 'insights');
   }
 }

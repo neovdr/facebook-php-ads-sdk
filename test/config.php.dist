@@ -48,6 +48,12 @@ return array(
   'act_id' => '',
 
   /**
+   * @var string PHP timezone compatible with the AdAccount timezone, override php.ini config
+   * @see http://php.net/manual/en/timezones.php
+   */
+  'act_timezone' => '',
+
+  /**
    * @var string Numeric Facebook id, preceded by 'act_', espressed as string
    * @see https://www.facebook.com/ads/manage/home/
    */
@@ -64,7 +70,6 @@ return array(
    * @var string Numeric Facebook Business Manager id, espressed as string
    */
   'business_manager_id' => '',
-
 
   // OPTIONAL INTEGRATION TESTS
 
@@ -91,16 +96,9 @@ return array(
      * @var bool Skip tests that require reach and frequency whitelisting
      */
     'no_reach_and_frequency_whitelist' => true,
-
   ),
 
   // OPTIONAL CONFIGURATIONS
-
-  /**
-   * @var string PHP timezone, override php.ini config
-   * @see http://php.net/manual/en/timezones.php
-   */
-  'act_timezone' => '',
 
   /**
    * @var string Override Facebook graph domain

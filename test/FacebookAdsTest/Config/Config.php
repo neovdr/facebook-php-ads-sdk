@@ -22,32 +22,104 @@
  *
  */
 
-namespace FacebookAds\Object\Values;
+namespace FacebookAdsTest\Config;
 
-abstract class CustomAudienceTypes {
+final class Config {
+
+  /**
+   * @var self
+   */
+  protected static $instance;
 
   /**
    * @var string
    */
-  const ID = 'UID';
+  public $testRunId;
 
   /**
    * @var string
    */
-  const CLAIM = 'CLAIM';
+  public $testImagePath;
 
   /**
    * @var string
    */
-  const EMAIL = 'EMAIL_SHA256';
+  public $testZippedImagesPath;
 
   /**
    * @var string
    */
-  const PHONE = 'PHONE_SHA256';
+  public $testVideoPath;
 
   /**
    * @var string
    */
-  const MOBILE_ADVERTISER_ID = 'MOBILE_ADVERTISER_ID';
+  public $curlLogger;
+
+  /**
+   * @var string
+   */
+  public $appId;
+
+  /**
+   * @var string
+   */
+  public $appSecret;
+
+  /**
+   * @var string
+   */
+  public $accessToken;
+
+  /**
+   * @var string
+   */
+  public $accountId;
+
+  /**
+   * @var string
+   */
+  public $pageId;
+
+  /**
+   * @var string
+   */
+  public $appUrl;
+
+  /**
+   * @var string
+   */
+  public $businessManagerId;
+
+  /**
+   * @var string
+   */
+  public $graphBaseDomain;
+
+  /**
+   * @var bool
+   */
+  public $skipSslVerification;
+
+  /**
+   * @return Config
+   */
+  public static function instance() {
+    return self::$instance ?: (self::$instance = new self());
+  }
+
+  /**
+   * @param Config $config
+   */
+  public static function setInstance(Config $config) {
+    self::$instance = $config;
+  }
+
+  /**
+   * @param string $key
+   * @param string $value
+   */
+  public function __set($key, $value) {
+    throw new \RuntimeException("Unsupported key: {$key}");
+  }
 }

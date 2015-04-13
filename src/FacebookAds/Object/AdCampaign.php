@@ -52,6 +52,7 @@ class AdCampaign extends AbstractArchivableCrudObject {
     AdCampaignFields::NAME,
     AdCampaignFields::STATUS,
     AdCampaignFields::BUYING_TYPE,
+    AdCampaignFields::PROMOTED_OBJECT,
   );
 
   /**
@@ -84,6 +85,17 @@ class AdCampaign extends AbstractArchivableCrudObject {
    */
   public function getAdGroups(array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(AdGroup::className(), $fields, $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getInsights(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      Insights::classname(), $fields, $params, 'insights');
   }
 
   /**

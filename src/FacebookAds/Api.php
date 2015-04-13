@@ -35,12 +35,12 @@ class Api {
   /**
    * @var string
    */
-  const VERSION = '2.2.1';
+  const VERSION = '2.3.0';
 
   /**
    * @var Api
    */
-  private static $instance;
+  protected static $instance;
 
   /**
    * @var Session
@@ -103,6 +103,16 @@ class Api {
   }
 
   /**
+   * @param string $string
+   * @return string
+   */
+  public static function base64UrlEncode($string) {
+    $str = strtr(base64_encode($string), '+/', '-_');
+    $str = str_replace('=', '', $str);
+    return $str;
+  }
+
+  /**
    * @param string $path
    * @param string $method
    * @param array $params
@@ -124,7 +134,9 @@ class Api {
       $params_ref = $request->getBodyParams();
     }
 
-    $params_ref->enhance($params);
+    if (!empty($params)) {
+      $params_ref->enhance($params);
+    }
     $params_ref['access_token'] = $this->getSession()->getAccessToken();
     $params_ref['appsecret_proof'] = $this->getSession()->getAppSecretProof();
 

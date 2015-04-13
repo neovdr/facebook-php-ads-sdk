@@ -22,12 +22,15 @@
  *
  */
 
-// Set your access token here:
+// Configurations
 $access_token = null;
 $app_id = null;
 $app_secret = null;
 // should begin with "act_" (eg: $account_id = 'act_1234567890';)
 $account_id = null;
+define('SDK_DIR', __DIR__ . '/..'); // Path to the SDK directory
+$loader = include SDK_DIR.'/vendor/autoload.php';
+// Configurations - End
 
 if (is_null($access_token) || is_null($app_id) || is_null($app_secret)) {
   throw new \Exception(
@@ -39,9 +42,6 @@ if (is_null($account_id)) {
   throw new \Exception(
     'You must set your account id before executing');
 }
-
-define('SDK_DIR', __DIR__ . '/..'); // Path to the SDK directory
-$loader = include SDK_DIR.'/vendor/autoload.php';
 
 use FacebookAds\Api;
 use FacebookAds\Logger\CurlLogger;
@@ -55,10 +55,13 @@ $logger = new CurlLogger();
 // $logger = new CurlLogger(fopen('test','w'));
 
 // If you need to escape double quotes, use the following - useful for docs
-$logger->setEscapeQuotes(true);
+$logger->setEscapeLevels(1);
 
 // Hide target ids and tokens
 $logger->setShowSensitiveData(false);
+
+// Attach the logger to the Api instance
+Api::instance()->setLogger($logger);
 
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\Fields\AdAccountFields;

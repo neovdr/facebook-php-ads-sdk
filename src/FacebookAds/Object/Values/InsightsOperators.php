@@ -22,27 +22,23 @@
  *
  */
 
-namespace FacebookAds\Object\Fields;
+namespace FacebookAds\Object\Values;
 
-abstract class AdGroupFields {
+abstract class InsightsOperators {
 
-  const ACCOUNT_ID = 'account_id';
-  const ADGROUP_STATUS = 'adgroup_status';
-  const BID_TYPE = 'bid_type';
-  const BID_INFO = 'bid_info';
-  const CAMPAIGN_ID = 'campaign_id';
-  const CAMPAIGN_GROUP_ID = 'campaign_group_id';
-  const CONVERSION_SPECS = 'conversion_specs';
-  const CREATED_TIME = 'created_time';
-  const ADGROUP_REVIEW_FEEDBACK = 'adgroup_review_feedback';
-  const ID = 'id';
-  const NAME = 'name';
-  const TARGETING = 'targeting';
-  const TRACKING_SPECS = 'tracking_specs';
-  const UPDATED_TIME = 'updated_time';
-  const VIEW_TAGS = 'view_tags';
-  const CREATIVE = 'creative';
-  const SOCIAL_PREFS = 'social_prefs';
-  const FAILED_DELIVERY_CHECKS = 'failed_delivery_checks';
-  const REDOWNLOAD = 'redownload';
+  const ALL = 'all';
+  const ANY = 'any';
+  const CONTAIN = 'contain';
+  const EQUAL = 'equal';
+  const GREATER_THAN = 'greater_than';
+  const GREATER_THAN_OR_EQUAL = 'greater_than_or_equal';
+  const IN = 'in';
+  const IN_RANGE = 'in_range';
+  const LESS_THAN = 'less_than';
+  const LESS_THAN_OR_EQUAL = 'less_than_or_equal';
+  const NONE = 'none';
+  const NOT_CONTAIN = 'not_contain';
+  const NOT_EQUAL = 'not_equal';
+  const NOT_IN = 'not_in';
+  const NOT_IN_RANGE = 'not_in_range';
 }
