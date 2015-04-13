@@ -66,6 +66,7 @@ class AdSet extends AbstractArchivableCrudObject
     AdSetFields::BID_INFO,
     AdSetFields::PROMOTED_OBJECT,
     AdSetFields::UPDATED_TIME,
+    AdSetFields::IS_AUTOBID,
   );
 
   /**
@@ -101,6 +102,17 @@ class AdSet extends AbstractArchivableCrudObject
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
       AdCreative::className(), $fields, $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getInsights(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      Insights::classname(), $fields, $params, 'insights');
   }
 
   /**

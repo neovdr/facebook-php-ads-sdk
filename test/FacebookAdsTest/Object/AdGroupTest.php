@@ -34,11 +34,11 @@ use FacebookAds\Object\Fields\AdCreativeFields;
 use FacebookAds\Object\Fields\AdGroupFields;
 use FacebookAds\Object\Fields\AdImageFields;
 use FacebookAds\Object\Fields\AdSetFields;
+use FacebookAds\Object\Fields\BidInfoFields;
 use FacebookAds\Object\TargetingSpecs;
 use FacebookAds\Object\Fields\TargetingSpecsFields;
-use FacebookAds\Object\Fields\AdGroupBidInfoFields;
 use FacebookAds\Object\Values\BidTypes;
-use FacebookAdsTest\SkippableFeatureTestInterface;
+use FacebookAdsTest\Config\SkippableFeatureTestInterface;
 
 class AdGroupTest extends AbstractCrudObjectTestCase
   implements SkippableFeatureTestInterface {
@@ -94,7 +94,7 @@ class AdGroupTest extends AbstractCrudObjectTestCase
     $this->adSet->{AdSetFields::TARGETING} = $targeting;
     $this->adSet->{AdSetFields::BID_TYPE} = BidTypes::BID_TYPE_CPM;
     $this->adSet->{AdSetFields::BID_INFO}
-      = array(AdGroupBidInfoFields::IMPRESSIONS => 2);
+      = array(BidInfoFields::IMPRESSIONS => 2);
     $this->adSet->save();
 
     $this->adImage = new AdImage(null, $this->getActId());
@@ -161,6 +161,7 @@ class AdGroupTest extends AbstractCrudObjectTestCase
     $this->assertCanFetchConnection($group, 'getStats');
     $this->assertCanFetchConnection($group, 'getClickTrackingTag');
     $this->assertCanFetchConnection($group, 'getConversions');
+    $this->assertCanFetchConnection($group, 'getInsights');
 
     $this->assertCanArchive($group);
 

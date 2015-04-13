@@ -22,12 +22,13 @@
  *
  */
 
-namespace FacebookAdsTest;
+namespace FacebookAds\Object\Fields;
 
-interface SkippableFeatureTestInterface {
+abstract class BidInfoFields {
 
-  /**
-   * @return array
-   */
-  public function skipIfAny();
+  const REACH = 'REACH';
+  const SOCIAL = 'SOCIAL';
+  const CLICKS = 'CLICKS';
+  const ACTIONS = 'ACTIONS';
+  const IMPRESSIONS = 'IMPRESSIONS';
 }

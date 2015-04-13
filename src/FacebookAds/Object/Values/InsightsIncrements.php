@@ -22,13 +22,10 @@
  *
  */
 
-namespace FacebookAds\Object\Fields;
+namespace FacebookAds\Object\Values;
 
-abstract class AdGroupBidInfoFields {
+abstract class InsightsIncrements {
 
-  const REACH = 'REACH';
-  const SOCIAL = 'SOCIAL';
-  const CLICKS = 'CLICKS';
-  const ACTIONS = 'ACTIONS';
-  const IMPRESSIONS = 'IMPRESSIONS';
+  const MONTHLY = 'monthly';
+  const ALL_DAYS = 'all_days';
 }

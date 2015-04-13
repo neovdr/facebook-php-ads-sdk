@@ -22,27 +22,12 @@
  *
  */
 
-namespace FacebookAds\Object\Fields;
+namespace FacebookAds\Object\Values;
 
-abstract class AdGroupFields {
+abstract class InsightsLevels {
 
-  const ACCOUNT_ID = 'account_id';
-  const ADGROUP_STATUS = 'adgroup_status';
-  const BID_TYPE = 'bid_type';
-  const BID_INFO = 'bid_info';
-  const CAMPAIGN_ID = 'campaign_id';
-  const CAMPAIGN_GROUP_ID = 'campaign_group_id';
-  const CONVERSION_SPECS = 'conversion_specs';
-  const CREATED_TIME = 'created_time';
-  const ADGROUP_REVIEW_FEEDBACK = 'adgroup_review_feedback';
-  const ID = 'id';
-  const NAME = 'name';
-  const TARGETING = 'targeting';
-  const TRACKING_SPECS = 'tracking_specs';
-  const UPDATED_TIME = 'updated_time';
-  const VIEW_TAGS = 'view_tags';
-  const CREATIVE = 'creative';
-  const SOCIAL_PREFS = 'social_prefs';
-  const FAILED_DELIVERY_CHECKS = 'failed_delivery_checks';
-  const REDOWNLOAD = 'redownload';
+  const ACCOUNT = 'account';
+  const ADGROUP = 'adgroup';
+  const CAMPAIGN = 'campaign';
+  const CAMPAIGN_GROUP = 'campaign_group';
 }
