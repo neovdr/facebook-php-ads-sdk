@@ -22,19 +22,24 @@
  *
  */
 
-namespace FacebookAds\Object\Fields\ObjectStory;
+namespace FacebookAdsTest\Object;
 
-abstract class LinkDataFields {
+use FacebookAds\Object\AdAccount;
+use FacebookAds\Object\AsyncJobReportStats;
 
-  const CALL_TO_ACTION = 'call_to_action';
-  const CAPTION = 'caption';
-  const CHILD_ATTACHMENTS = 'child_attachments';
-  const DESCRIPTION = 'description';
-  const IMAGE_HASH = 'image_hash';
-  const IMAGE_CROPS = 'image_crops';
-  const LINK = 'link';
-  const MESSAGE = 'message';
-  const NAME = 'name';
-  const PICTURE = 'picture';
-  const MULTI_SHARE_OPTIMIZED = 'multi_share_optimized';
+class AsyncJobReportStatsTest extends AbstractAsyncJobTestCase {
+
+  public function testCrud() {
+    $account = new AdAccount($this->getConfig()->accountId);
+
+    $report_stats_params = array(
+      'date_preset' => 'yesterday',
+      'data_columns' => "['campaign_name','reach','actions','spend', 'clicks']"
+    );
+
+    $job = $account->getReportStatsAsync(array(), $report_stats_params);
+    $this->assertTrue($job instanceof AsyncJobReportStats);
+    $this->waitTillJobComplete($job);
+    $job->getResult();
+  }
 }

@@ -22,19 +22,31 @@
  *
  */
 
-namespace FacebookAds\Object\Fields\ObjectStory;
+namespace FacebookAds\Object;
 
-abstract class LinkDataFields {
+use FacebookAds\Cursor;
 
-  const CALL_TO_ACTION = 'call_to_action';
-  const CAPTION = 'caption';
-  const CHILD_ATTACHMENTS = 'child_attachments';
-  const DESCRIPTION = 'description';
-  const IMAGE_HASH = 'image_hash';
-  const IMAGE_CROPS = 'image_crops';
-  const LINK = 'link';
-  const MESSAGE = 'message';
-  const NAME = 'name';
-  const PICTURE = 'picture';
-  const MULTI_SHARE_OPTIMIZED = 'multi_share_optimized';
+class AsyncJobInsights extends AbstractAsyncJobObject {
+
+  /**
+   * @return string
+   */
+  protected function getCreateIdFieldName() {
+    return 'report_run_id';
+  }
+
+  /**
+   * @return string
+   */
+  public function getEndpoint() {
+    return 'insights';
+  }
+
+  /**
+   * @return Cursor
+   */
+  public function getResult() {
+    return $this->getManyByConnection(
+      Insights::classname(), array(), array(), $this->getEndpoint());
+  }
 }

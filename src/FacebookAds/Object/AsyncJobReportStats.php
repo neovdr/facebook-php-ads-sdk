@@ -22,19 +22,48 @@
  *
  */
 
-namespace FacebookAds\Object\Fields\ObjectStory;
+namespace FacebookAds\Object;
 
-abstract class LinkDataFields {
+use FacebookAds\Cursor;
+use FacebookAds\Http\RequestInterface;
 
-  const CALL_TO_ACTION = 'call_to_action';
-  const CAPTION = 'caption';
-  const CHILD_ATTACHMENTS = 'child_attachments';
-  const DESCRIPTION = 'description';
-  const IMAGE_HASH = 'image_hash';
-  const IMAGE_CROPS = 'image_crops';
-  const LINK = 'link';
-  const MESSAGE = 'message';
-  const NAME = 'name';
-  const PICTURE = 'picture';
-  const MULTI_SHARE_OPTIMIZED = 'multi_share_optimized';
+class AsyncJobReportStats extends AbstractAsyncJobObject {
+
+  /**
+   * @return string
+   */
+  protected function getCreateIdFieldName() {
+    return 'id';
+  }
+
+  /**
+   * @return string
+   */
+  public function getEndpoint() {
+    return 'reportstats';
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getResult(
+    array $fields = array(), array $params = array()) {
+    $fields = implode(',', $fields ?: static::getDefaultReadFields());
+    if ($fields) {
+      $params['fields'] = $fields;
+    }
+
+    $params['report_run_id'] = $this->assureId();
+
+    $response = $this->getApi()->call(
+      '/' . $this->assureParentId() . '/reportstats',
+      RequestInterface::METHOD_GET,
+      $params);
+
+    $prototype = new AdStats(null, $this->{static::FIELD_ID}, $this->getApi());
+
+    return new Cursor($response, $prototype);
+  }
 }

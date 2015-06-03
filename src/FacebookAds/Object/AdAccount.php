@@ -192,6 +192,17 @@ class AdAccount extends AbstractCrudObject {
    * @param array $params
    * @return Cursor
    */
+  public function getAdTags(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      AdTag::classname(), $fields, $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
   public function getAdVideos(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(AdVideo::className(), $fields, $params);
@@ -304,6 +315,17 @@ class AdAccount extends AbstractCrudObject {
   /**
    * @param array $fields
    * @param array $params
+   * @return AsyncJobReportStats
+   */
+  public function getReportStatsAsync(
+    array $fields = array(), array $params = array()) {
+    return $this->createAsyncJob(
+      AsyncJobReportStats::className(), $fields, $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
    * @return Cursor
    */
   public function getStats(array $fields = array(), array $params = array()) {
@@ -375,5 +397,16 @@ class AdAccount extends AbstractCrudObject {
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
       Insights::classname(), $fields, $params, 'insights');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return AsyncJobInsights
+   */
+  public function getInsightsAsync(
+    array $fields = array(), array $params = array()) {
+    return $this->createAsyncJob(
+      AsyncJobInsights::className(), $fields, $params);
   }
 }

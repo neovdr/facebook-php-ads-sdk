@@ -63,6 +63,36 @@ class AdGroup extends AbstractArchivableCrudObject
   const STATUS_PREAPPROVED = 'PREAPPROVED';
 
   /**
+   * @var string
+   */
+  const STATUS_DISAPPROVED = 'DISAPPROVED';
+
+  /**
+   * @var string
+   */
+  const STATUS_PENDING_BILLING_INFO = 'PENDING_BILLING_INFO';
+
+  /**
+   * @var string
+   */
+  const STATUS_CREDIT_CARD_NEEDED = 'CREDIT_CARD_NEEDED';
+
+  /**
+   * @var string
+   */
+  const STATUS_DELETED = 'DELETED';
+
+  /**
+   * @var string
+   */
+  const STATUS_DISABLED = 'DISABLED';
+
+  /**
+   * @var string
+   */
+  const STATUS_ARCHIVED = 'ARCHIVED';
+
+  /**
    * @var string[]
    */
   protected static $fields = array(
@@ -201,5 +231,16 @@ class AdGroup extends AbstractArchivableCrudObject
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
       Insights::classname(), $fields, $params, 'insights');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return AsyncJobInsights
+   */
+  public function getInsightsAsync(
+    array $fields = array(), array $params = array()) {
+    return $this->createAsyncJob(
+      AsyncJobInsights::className(), $fields, $params);
   }
 }

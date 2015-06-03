@@ -53,10 +53,12 @@ class AdSet extends AbstractArchivableCrudObject
     AdSetFields::CAMPAIGN_GROUP_ID,
     AdSetFields::CAMPAIGN_STATUS,
     AdSetFields::CREATED_TIME,
+    AdSetFields::CREATIVE_SEQUENCE,
     AdSetFields::START_TIME,
     AdSetFields::END_TIME,
     AdSetFields::DAILY_BUDGET,
     AdSetFields::LIFETIME_BUDGET,
+    AdSetFields::LIFETIME_IMPS,
     AdSetFields::BUDGET_REMAINING,
     AdSetFields::PACING_TYPE,
     AdSetFields::RF_PREDICTION_ID,
@@ -113,6 +115,17 @@ class AdSet extends AbstractArchivableCrudObject
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
       Insights::classname(), $fields, $params, 'insights');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return AsyncJobInsights
+   */
+  public function getInsightsAsync(
+    array $fields = array(), array $params = array()) {
+    return $this->createAsyncJob(
+      AsyncJobInsights::className(), $fields, $params);
   }
 
   /**

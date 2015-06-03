@@ -25,62 +25,57 @@
 namespace FacebookAds\Object;
 
 use FacebookAds\Http\RequestInterface;
-use FacebookAds\Object\Fields\AdVideoFields;
-use FacebookAds\Object\Traits\CannotDelete;
 use FacebookAds\Object\Traits\CannotUpdate;
-use FacebookAds\Object\Traits\FieldValidation;
 
-class AdVideo extends AbstractCrudObject {
-  use FieldValidation;
-  use CannotDelete;
+abstract class AbstractAsyncJobObject extends AbstractCrudObject {
   use CannotUpdate;
-
-  /**
-   * @var string[]
-   **/
-  protected static $fields = array(
-    AdVideoFields::CREATED_TIME,
-    AdVideoFields::DESCRIPTION,
-    AdVideoFields::EMBED_HTML,
-    AdVideoFields::FORMAT,
-    AdVideoFields::FROM,
-    AdVideoFields::ICON,
-    AdVideoFields::ID,
-    AdVideoFields::NAME,
-    AdVideoFields::PICTURE,
-    AdVideoFields::PUBLISHED,
-    AdVideoFields::SOURCE,
-    AdVideoFields::UPDATED_TIME,
-    AdVideoFields::THUMBNAILS
-  );
 
   /**
    * @return string
    */
-  protected function getEndpoint() {
-    return 'advideos';
+  abstract protected function getCreateIdFieldName();
+
+  /**
+   * @return string
+   */
+  protected function getCompletitionPercentageFieldName() {
+    return 'async_percent_completion';
   }
 
+  /**
+   * Create function for the object.
+   *
+   * @param array $params Additional parameters to include in the request
+   * @return $this
+   * @throws \Exception
+   */
   public function create(array $params = array()) {
-    $data = $this->exportData();
-    $source = $data[AdVideoFields::SOURCE];
-    unset($data[AdVideoFields::SOURCE]);
-    $params = array_merge($data, $params);
+    if ($this->data[static::FIELD_ID]) {
+      throw new \Exception("Object has already an ID");
+    }
 
-    $request = $this->getApi()->prepareRequest(
+    $response = $this->getApi()->call(
       '/'.$this->assureParentId().'/'.$this->getEndpoint(),
       RequestInterface::METHOD_POST,
-      $params
-    );
-
-    $request->setLastLevelDomain('graph-video');
-    $request->getFileParams()->offsetSet(AdVideoFields::SOURCE, $source);
-    $response = $this->getApi()->executeRequest($request);
-
+      array_merge($this->exportData(), $params));
+    $this->clearHistory();
     $data = $response->getContent();
     $this->data[static::FIELD_ID]
-      = is_string($data) ? $data : (string) $data[static::FIELD_ID];
+      = (string) $data[$this->getCreateIdFieldName()];
 
     return $this;
   }
+
+  /**
+   * This method won't fetch new data, you are required to call read() before
+   * @return bool
+   */
+  public function isComplete() {
+    return $this->{$this->getCompletitionPercentageFieldName()} === 100;
+  }
+
+  /**
+   * @return mixed
+   */
+  abstract public function getResult();
 }

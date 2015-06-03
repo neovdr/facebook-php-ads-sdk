@@ -22,19 +22,38 @@
  *
  */
 
-namespace FacebookAds\Object\Fields\ObjectStory;
+namespace FacebookAdsTest\Object;
 
-abstract class LinkDataFields {
+use FacebookAds\Object\AbstractAsyncJobObject;
+use FacebookAdsTest\Config\SkippableFeatureTestInterface;
 
-  const CALL_TO_ACTION = 'call_to_action';
-  const CAPTION = 'caption';
-  const CHILD_ATTACHMENTS = 'child_attachments';
-  const DESCRIPTION = 'description';
-  const IMAGE_HASH = 'image_hash';
-  const IMAGE_CROPS = 'image_crops';
-  const LINK = 'link';
-  const MESSAGE = 'message';
-  const NAME = 'name';
-  const PICTURE = 'picture';
-  const MULTI_SHARE_OPTIMIZED = 'multi_share_optimized';
+abstract class AbstractAsyncJobTestCase extends AbstractCrudObjectTestCase
+  implements SkippableFeatureTestInterface {
+
+  /**
+   * @return array
+   */
+  public function skipIfAny() {
+    return array('no_async_jobs');
+  }
+
+  /**
+   * @param AbstractAsyncJobObject $job
+   * @param int $timeout
+   * @param int $interval
+   */
+  protected function waitTillJobComplete(
+    AbstractAsyncJobObject $job, $timeout = 60, $interval = 2) {
+
+    $end = time() + $timeout;
+    do {
+      if ($job->read()->isComplete()) {
+        return;
+      }
+      sleep($interval);
+    } while (time() <= $end);
+
+    $this->markTestSkipped(
+      "Async Job timed out. Timeout: {$timeout}, Interval: {$interval}");
+  }
 }
