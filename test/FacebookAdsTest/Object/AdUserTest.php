@@ -25,26 +25,23 @@
 namespace FacebookAdsTest\Object;
 
 use FacebookAds\Object\AdAccount;
+use FacebookAds\Object\AdUser;
+use FacebookAds\Object\Fields\AdUserFields;
 
 class AdUserTest extends AbstractCrudObjectTestCase {
 
   public function testCrudAccess() {
-    $ad_account = new AdAccount($this->getActId());
+    $ad_account = new AdAccount($this->getConfig()->accountId);
     $ad_users = $ad_account->getAdUsers();
-    $this->assertNotNull($ad_users);
 
     $this->assertGreaterThan(0, $ad_users->count());
 
-    $me = $this->getApi()->call('/me')->getContent();
-
-    $this->assertNotNull($me);
-
-    $uid = $me['id'];
-
+    $uid = (new AdUser('me'))->read()->{AdUserFields::ID};
     $found = false;
     foreach ($ad_users as $ad_user) {
       if ($ad_user->id === $uid) {
         $this->assertCanFetchConnection($ad_user, 'getAdAccounts');
+        $this->assertCanFetchConnection($ad_user, 'getAdAccountGroups');
         $found = true;
         break;
       }

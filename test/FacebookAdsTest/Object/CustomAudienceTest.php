@@ -26,6 +26,7 @@ namespace FacebookAdsTest\Object;
 
 use FacebookAds\Object\CustomAudience;
 use FacebookAds\Object\Fields\CustomAudienceFields;
+use FacebookAds\Object\Values\CustomAudienceSubtypes;
 use FacebookAds\Object\Values\CustomAudienceTypes;
 
 class CustomAudienceTest extends AbstractCrudObjectTestCase {
@@ -45,15 +46,18 @@ class CustomAudienceTest extends AbstractCrudObjectTestCase {
   }
 
   public function testCustomAudiences() {
-    $ca = new CustomAudience(null, $this->getActId());
-    $ca->{CustomAudienceFields::NAME} = $this->getTestRunId();
+    $ca = new CustomAudience(null, $this->getConfig()->accountId);
+    $ca->{CustomAudienceFields::NAME} = $this->getConfig()->testRunId;
+    $ca->{CustomAudienceFields::SUBTYPE} = CustomAudienceSubtypes::CUSTOM;
 
     $this->assertCanCreate($ca);
 
     $this->assertCanRead($ca);
     $this->assertCanUpdate(
       $ca,
-      array(CustomAudienceFields::NAME => $this->getTestRunId().' updated'));
+      array(
+        CustomAudienceFields::NAME => $this->getConfig()->testRunId.' updated',
+      ));
 
     $users = array('someone@example.com');
 
@@ -73,22 +77,23 @@ class CustomAudienceTest extends AbstractCrudObjectTestCase {
    * @depends testCustomAudiences
    */
   public function testAppIdsPayload() {
-    $ca = new CustomAudience(null, $this->getActId());
-    $ca->{CustomAudienceFields::NAME} = $this->getTestRunId();
+    $ca = new CustomAudience(null, $this->getConfig()->accountId);
+    $ca->{CustomAudienceFields::NAME} = $this->getConfig()->testRunId;
+    $ca->{CustomAudienceFields::SUBTYPE} = CustomAudienceSubtypes::CUSTOM;
     $ca->create();
 
     $users = array($this->getApi()->call('/me')->getContent()['id']);
 
     $add = $ca->addUsers(
-      $users, CustomAudienceTypes::ID, array($this->getAppId()));
+      $users, CustomAudienceTypes::ID, array($this->getConfig()->appId));
     $this->assertClusterChangesResponse($ca, $users, $add);
 
     $remove = $ca->removeUsers(
-      $users, CustomAudienceTypes::ID, array($this->getAppId()));
+      $users, CustomAudienceTypes::ID, array($this->getConfig()->appId));
     $this->assertClusterChangesResponse($ca, $users, $remove);
 
     $optout = $ca->optOutUsers(
-      $users, CustomAudienceTypes::ID, array($this->getAppId()));
+      $users, CustomAudienceTypes::ID, array($this->getConfig()->appId));
     $this->assertSuccessResponse($optout);
 
     $ca->delete();

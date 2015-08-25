@@ -43,15 +43,9 @@ class AdConversionPixel extends AbstractCrudObject {
   }
 
   /**
-   * @var string[]
+   * @return AdConversionPixelFields
    */
-  protected static $fields = array(
-    AdConversionPixelFields::ID,
-    AdConversionPixelFields::NAME,
-    AdConversionPixelFields::TAG,
-    AdConversionPixelFields::STATUS,
-    AdConversionPixelFields::CREATOR,
-    AdConversionPixelFields::JS_PIXEL,
-    AdConversionPixelFields::VALUE,
-  );
+  public static function getFieldsEnum() {
+    return AdConversionPixelFields::getInstance();
+  }
 }

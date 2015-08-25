@@ -24,11 +24,16 @@
 
 namespace FacebookAds\Object\Fields;
 
-abstract class AdSetFields {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static AdSetFields getInstance()
+ */
+class AdSetFields extends AbstractEnum {
 
   const ACCOUNT_ID = 'account_id';
-  const BID_TYPE = 'bid_type';
-  const BID_INFO = 'bid_info';
+  const BID_AMOUNT = 'bid_amount';
+  const BILLING_EVENT = 'billing_event';
   const BUDGET_REMAINING = 'budget_remaining';
   const CAMPAIGN_GROUP_ID = 'campaign_group_id';
   const CAMPAIGN_SCHEDULE = 'campaign_schedule';
@@ -42,10 +47,13 @@ abstract class AdSetFields {
   const LIFETIME_BUDGET = 'lifetime_budget';
   const LIFETIME_IMPS = 'lifetime_imps';
   const NAME = 'name';
+  const OPTIMIZATION_GOAL = 'optimization_goal';
   const PACING_TYPE = 'pacing_type';
   const RF_PREDICTION_ID = 'rf_prediction_id';
   const START_TIME = 'start_time';
   const UPDATED_TIME = 'updated_time';
   const TARGETING = 'targeting';
   const PROMOTED_OBJECT = 'promoted_object';
+  const ADLABELS = 'adlabels';
+  const PRODUCT_AD_BEHAVIOR = 'product_ad_behavior';
 }

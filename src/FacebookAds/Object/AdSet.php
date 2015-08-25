@@ -27,11 +27,14 @@ namespace FacebookAds\Object;
 use FacebookAds\Object\Fields\AdSetFields;
 use FacebookAds\Object\Traits\FieldValidation;
 use FacebookAds\Object\Traits\ObjectValidation;
+use FacebookAds\Object\Traits\AdLabelAwareCrudObjectTrait;
 use FacebookAds\Cursor;
 
 class AdSet extends AbstractArchivableCrudObject
   implements CanRedownloadInterface {
-  use FieldValidation, ObjectValidation;
+  use FieldValidation;
+  use ObjectValidation;
+  use AdLabelAwareCrudObjectTrait;
 
   /**
    * @var string
@@ -44,38 +47,17 @@ class AdSet extends AbstractArchivableCrudObject
   const STATUS_PAUSED = 'PAUSED';
 
   /**
-   * @var string[]
-   */
-  protected static $fields = array(
-    AdSetFields::ID,
-    AdSetFields::NAME,
-    AdSetFields::ACCOUNT_ID,
-    AdSetFields::CAMPAIGN_GROUP_ID,
-    AdSetFields::CAMPAIGN_STATUS,
-    AdSetFields::CREATED_TIME,
-    AdSetFields::CREATIVE_SEQUENCE,
-    AdSetFields::START_TIME,
-    AdSetFields::END_TIME,
-    AdSetFields::DAILY_BUDGET,
-    AdSetFields::LIFETIME_BUDGET,
-    AdSetFields::LIFETIME_IMPS,
-    AdSetFields::BUDGET_REMAINING,
-    AdSetFields::PACING_TYPE,
-    AdSetFields::RF_PREDICTION_ID,
-    AdSetFields::CAMPAIGN_SCHEDULE,
-    AdSetFields::TARGETING,
-    AdSetFields::BID_TYPE,
-    AdSetFields::BID_INFO,
-    AdSetFields::PROMOTED_OBJECT,
-    AdSetFields::UPDATED_TIME,
-    AdSetFields::IS_AUTOBID,
-  );
-
-  /**
    * @return string
    */
   protected function getEndpoint() {
     return 'adcampaigns';
+  }
+
+  /**
+   * @return AdSetFields
+   */
+  public static function getFieldsEnum() {
+    return AdSetFields::getInstance();
   }
 
   /**
@@ -126,15 +108,5 @@ class AdSet extends AbstractArchivableCrudObject
     array $fields = array(), array $params = array()) {
     return $this->createAsyncJob(
       AsyncJobInsights::className(), $fields, $params);
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return AdStats
-   */
-  public function getStats(array $fields = array(), array $params = array()) {
-    return $this->getOneByConnection(
-      AdStats::className(), $fields, $params, 'stats');
   }
 }

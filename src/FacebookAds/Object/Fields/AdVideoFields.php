@@ -24,11 +24,17 @@
 
 namespace FacebookAds\Object\Fields;
 
-abstract class AdVideoFields {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static AdVideoFields getInstance()
+ */
+class AdVideoFields extends AbstractEnum {
 
   const CREATED_TIME = 'created_time';
   const DESCRIPTION = 'description';
   const EMBED_HTML = 'embed_html';
+  const EMBEDDABLE = 'embeddable';
   const FORMAT = 'format';
   const FROM = 'from';
   const ICON = 'icon';

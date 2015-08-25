@@ -22,13 +22,20 @@
  *
  */
 
-namespace FacebookAds\Object\Values;
+namespace FacebookAds\Object\Fields;
 
-abstract class BidTypes {
+use FacebookAds\Enum\AbstractEnum;
 
-  const BID_TYPE_CPA = 'CPA';
-  const BID_TYPE_CPC = 'CPC';
-  const BID_TYPE_CPM = 'CPM';
-  const BID_TYPE_MULTI_PREMIUM = 'MULTI_PREMIUM';
-  const BID_TYPE_ABSOLUTE_OCPM = 'ABSOLUTE_OCPM';
+/**
+ * @method static ActivityFields getInstance()
+ */
+class ActivityFields extends AbstractEnum {
+
+    const ACTOR_ID = 'actor_id';
+    const ACTOR_NAME = 'actor_name';
+    const EXTRA_DATA = 'extra_data';
+    const EVENT_TIME = 'event_time';
+    const EVENT_TYPE = 'event_type';
+    const OBJECT_ID = 'object_id';
+    const OBJECT_NAME = 'object_name';
 }

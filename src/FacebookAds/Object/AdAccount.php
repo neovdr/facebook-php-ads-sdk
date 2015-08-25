@@ -28,6 +28,7 @@ use FacebookAds\Object\Fields\AdAccountFields;
 use FacebookAds\Object\Traits\CannotCreate;
 use FacebookAds\Object\Traits\CannotDelete;
 use FacebookAds\Object\Traits\FieldValidation;
+use FacebookAds\Http\RequestInterface;
 use FacebookAds\Cursor;
 
 class AdAccount extends AbstractCrudObject {
@@ -36,53 +37,18 @@ class AdAccount extends AbstractCrudObject {
   use CannotDelete;
 
   /**
-   * @var string[]
-   */
-  protected static $fields = array(
-    AdAccountFields::ID,
-    AdAccountFields::ACCOUNT_GROUPS,
-    AdAccountFields::ACCOUNT_ID,
-    AdAccountFields::ACCOUNT_STATUS,
-    AdAccountFields::AGE,
-    AdAccountFields::AGENCY_CLIENT_DECLARATION,
-    AdAccountFields::AMOUNT_SPENT,
-    AdAccountFields::BALANCE,
-    AdAccountFields::BUSINESS_CITY,
-    AdAccountFields::BUSINESS_COUNTRY_CODE,
-    AdAccountFields::BUSINESS_NAME,
-    AdAccountFields::BUSINESS_STATE,
-    AdAccountFields::BUSINESS_STREET2,
-    AdAccountFields::BUSINESS_STREET,
-    AdAccountFields::BUSINESS_ZIP,
-    AdAccountFields::CREATED_TIME,
-    AdAccountFields::END_ADVERTISER,
-    AdAccountFields::MEDIA_AGENCY,
-    AdAccountFields::PARTNER,
-    AdAccountFields::CAPABILITIES,
-    AdAccountFields::CURRENCY,
-    AdAccountFields::DAILY_SPEND_LIMIT,
-    AdAccountFields::IS_PERSONAL,
-    AdAccountFields::NAME,
-    AdAccountFields::OFFSITE_PIXELS_TOS_ACCEPTED,
-    AdAccountFields::SPEND_CAP,
-    AdAccountFields::SPEND_CAP_ACTION,
-    AdAccountFields::FUNDING_SOURCE,
-    AdAccountFields::FUNDING_SOURCE_DETAILS,
-    AdAccountFields::TIMEZONE_ID,
-    AdAccountFields::TIMEZONE_NAME,
-    AdAccountFields::TIMEZONE_OFFSET_HOURS_UTC,
-    AdAccountFields::TOS_ACCEPTED,
-    AdAccountFields::USERS,
-    AdAccountFields::TAX_ID_STATUS,
-  );
-
-  /**
    * @return string
    */
   protected function getEndpoint() {
     return 'adaccounts';
   }
 
+  /**
+   * @return AdAccountFields
+   */
+  public static function getFieldsEnum() {
+    return AdAccountFields::getInstance();
+  }
 
   /**
    * @param array $fields
@@ -129,31 +95,9 @@ class AdAccount extends AbstractCrudObject {
    * @param array $params
    * @return Cursor
    */
-  public function getAdCampaignStats(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      AdStats::className(), $fields, $params, 'adcampaignstats');
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return Cursor
-   */
   public function getAdGroups(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(AdGroup::className(), $fields, $params);
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return Cursor
-   */
-  public function getAdGroupStats(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      AdStats::className(), $fields, $params, 'adgroupstats');
   }
 
   /**
@@ -185,17 +129,6 @@ class AdAccount extends AbstractCrudObject {
   public function getAdsPixels(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(AdsPixel::className(), $fields, $params);
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return Cursor
-   */
-  public function getAdTags(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      AdTag::classname(), $fields, $params);
   }
 
   /**
@@ -304,33 +237,15 @@ class AdAccount extends AbstractCrudObject {
   /**
    * @param array $fields
    * @param array $params
-   * @return Cursor
+   * @return TargetingDescription
    */
-  public function getReportsStats(
+  public function getTargetingDescription(
     array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      AdStats::className(), $fields, $params, 'reportstats');
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return AsyncJobReportStats
-   */
-  public function getReportStatsAsync(
-    array $fields = array(), array $params = array()) {
-    return $this->createAsyncJob(
-      AsyncJobReportStats::className(), $fields, $params);
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return Cursor
-   */
-  public function getStats(array $fields = array(), array $params = array()) {
     return $this->getOneByConnection(
-      AdStats::className(), $fields, $params, 'stats');
+      TargetingDescription::className(),
+      $fields,
+      $params,
+      'targetingsentencelines');
   }
 
   /**
@@ -342,39 +257,6 @@ class AdAccount extends AbstractCrudObject {
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
       Transaction::className(), $fields, $params, 'transactions');
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return AdStats
-   */
-  public function getConversions(
-    array $fields = array(), array $params = array()) {
-    return $this->getOneByConnection(
-      AdStats::className(), $fields, $params, 'conversions');
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return AdStats
-   */
-  public function getAdCampaignConversions(
-    array $fields = array(), array $params = array()) {
-    return $this->getOneByConnection(
-      AdStats::className(), $fields, $params, 'adcampaignconversions');
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return AdStats
-   */
-  public function getAdgroupConversions(
-    array $fields = array(), array $params = array()) {
-    return $this->getOneByConnection(
-      AdStats::className(), $fields, $params, 'adgroupconversions');
   }
 
   /**
@@ -408,5 +290,101 @@ class AdAccount extends AbstractCrudObject {
     array $fields = array(), array $params = array()) {
     return $this->createAsyncJob(
       AsyncJobInsights::className(), $fields, $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getAgencies(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      Agency::className(), $fields, $params, 'agencies');
+  }
+
+  /**
+   * @param int $business_id
+   * @param array $permitted_roles
+   */
+  public function grantAgencyAcccess($business_id, $permitted_roles) {
+    $params = array(
+      'business' => $business_id,
+      'permitted_roles' => $permitted_roles,
+    );
+
+    $this->getApi()->call(
+      '/'.$this->assureId().'/agencies',
+      RequestInterface::METHOD_POST,
+      $params);
+  }
+
+  /**
+   * @param int $business_id
+   */
+  public function revokeAgencyAccess($business_id) {
+    $params = array(
+      'business' => $business_id,
+    );
+
+    $this->getApi()->call(
+      '/'.$this->assureId().'/agencies',
+      RequestInterface::METHOD_DELETE,
+      $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getAdLabels(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      AdLabel::className(), $fields, $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getAdCampaignsByLabel(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      AdCampaign::classname(), $fields, $params, 'adcampaigngroupsbylabels');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getAdSetsByLabel(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      AdSet::classname(), $fields, $params, 'adcampaignsbylabels');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getAdGroupsByLabel(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      AdGroup::classname(), $fields, $params, 'adgroupsbylabels');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getAdCreativesByLabel(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      AdCreative::classname(), $fields, $params, 'adcreativesbylabels');
   }
 }

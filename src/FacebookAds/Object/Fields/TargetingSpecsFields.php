@@ -24,7 +24,12 @@
 
 namespace FacebookAds\Object\Fields;
 
-abstract class TargetingSpecsFields {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static TargetingSpecsFields getInstance()
+ */
+class TargetingSpecsFields extends AbstractEnum {
 
   const GENDERS = 'genders';
   const AGE_MIN = 'age_min';
@@ -32,7 +37,6 @@ abstract class TargetingSpecsFields {
   const GEO_LOCATIONS = 'geo_locations';
   const EXCLUDED_GEO_LOCATIONS = 'excluded_geo_locations';
   const USER_ADCLUSTERS = 'user_adclusters';
-  const EXCLUDED_USER_ADCLUSTERS = 'excluded_user_adclusters';
   const INTERESTS = 'interests';
   const USER_OS = 'user_os';
   const USER_DEVICE = 'user_device';
@@ -68,6 +72,7 @@ abstract class TargetingSpecsFields {
   const ZIPS = 'zips';
   const CUSTOM_AUDIENCES = 'custom_audiences';
   const EXCLUDED_CUSTOM_AUDIENCES = 'excluded_custom_audiences';
-  const CONJUNCTIVE_USER_ADCLUSTERS = 'conjunctive_user_adclusters';
   const DYNAMIC_AUDIENCE_IDS = 'dynamic_audience_ids';
+  const PRODUCT_AUDIENCE_SPECS = 'product_audience_specs';
+  const EXCLUDED_PRODUCT_AUDIENCE_SPECS = 'excluded_product_audience_specs';
 }

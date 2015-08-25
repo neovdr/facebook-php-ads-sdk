@@ -39,7 +39,6 @@ use FacebookAds\Object\ObjectStory\TemplateData;
 use FacebookAds\Object\Fields\AdCampaignFields;
 use FacebookAds\Object\Fields\AdCreativeFields;
 use FacebookAds\Object\Fields\AdGroupFields;
-use FacebookAds\Object\Fields\AdGroupBidInfoFields;
 use FacebookAds\Object\Fields\AdSetFields;
 use FacebookAds\Object\Fields\AdsPixelsFields;
 use FacebookAds\Object\Fields\ObjectStory\TemplateDataFields;
@@ -49,8 +48,9 @@ use FacebookAds\Object\Fields\ProductCatalogFields;
 use FacebookAds\Object\Fields\ProductSetFields;
 use FacebookAds\Object\Fields\TargetingSpecsFields;
 use FacebookAds\Object\Values\AdObjectives;
-use FacebookAds\Object\Values\BidTypes;
+use FacebookAds\Object\Values\BillingEvents;
 use FacebookAds\Object\Values\CallToActionTypes;
+use FacebookAds\Object\Values\OptimizationGoals;
 
 class DynamicProductAdsAdvertTest extends AbstractCrudObjectTestCase {
 
@@ -97,23 +97,23 @@ class DynamicProductAdsAdvertTest extends AbstractCrudObjectTestCase {
   public function setup() {
     parent::setup();
 
-    $account = new AdAccount($this->getActId());
+    $account = new AdAccount($this->getConfig()->accountId);
     $this->adsPixel = $account->getAdsPixels()->current();
     if ($this->adsPixel === null) {
       throw new \Exception('Ads Pixel is null');
     }
 
     $this->productCatalog =
-      new ProductCatalog(null, $this->getBusinessManagerId());
+      new ProductCatalog(null, $this->getConfig()->businessId);
     $this->productCatalog->setData(array(
-      ProductCatalogFields::NAME => 'Test Catalog '.$this->getTestRunId(),
+      ProductCatalogFields::NAME => $this->getConfig()->testRunId,
     ));
     $this->productCatalog->create();
 
     $this->productSet =
       new ProductSet(null, $this->productCatalog->{ProductCatalogFields::ID});
     $this->productSet->setData(array(
-      ProductSetFields::NAME => 'Test Set '.$this->getTestRunId(),
+      ProductSetFields::NAME => $this->getConfig()->testRunId,
       ProductSetFields::FILTER => array(
         'retailer_id' => array(
           'is_any' => array('pid1', 'pid2')
@@ -122,9 +122,10 @@ class DynamicProductAdsAdvertTest extends AbstractCrudObjectTestCase {
     ));
     $this->productSet->create();
 
-    $this->productAudience = new ProductAudience(null, $this->getActId());
+    $this->productAudience
+      = new ProductAudience(null, $this->getConfig()->accountId);
     $this->productAudience->setData(array(
-      ProductAudienceFields::NAME => 'Test Audience '.$this->getTestRunId(),
+      ProductAudienceFields::NAME => $this->getConfig()->testRunId,
       ProductAudienceFields::PRODUCT_SET_ID =>
         $this->productSet->{ProductSetFields::ID},
       ProductAudienceFields::PIXEL_ID =>
@@ -183,9 +184,9 @@ class DynamicProductAdsAdvertTest extends AbstractCrudObjectTestCase {
   }
 
   public function testDynamicProductAdsCreation() {
-    $this->adCampaign = new AdCampaign(null, $this->getActId());
+    $this->adCampaign = new AdCampaign(null, $this->getConfig()->accountId);
     $this->adCampaign->setData(array(
-      AdCampaignFields::NAME => 'DPA Test Campaign '.$this->getTestRunId(),
+      AdCampaignFields::NAME => $this->getConfig()->testRunId,
       AdCampaignFields::OBJECTIVE => AdObjectives::PRODUCT_CATALOG_SALES,
       AdCampaignFields::PROMOTED_OBJECT =>
         array('product_catalog_id' =>
@@ -199,19 +200,21 @@ class DynamicProductAdsAdvertTest extends AbstractCrudObjectTestCase {
     $targeting->{TargetingSpecsFields::DYNAMIC_AUDIENCE_IDS} =
       array($this->productAudience->{ProductAudienceFields::ID});
 
-    $this->adSet = new AdSet(null, $this->getActId());
+    $this->adSet = new AdSet(null, $this->getConfig()->accountId);
     $this->adSet->setData(array(
-      AdSetFields::NAME => 'DPA Test Ad Set '.$this->getTestRunId(),
-      AdSetFields::BID_TYPE => BidTypes::BID_TYPE_CPC,
-      AdSetFields::BID_INFO =>
-        array(AdGroupBidInfoFields::CLICKS => 150),
-        AdSetFields::DAILY_BUDGET => 2000,
-        AdSetFields::CAMPAIGN_GROUP_ID =>
-          $this->adCampaign->{AdCampaignFields::ID},
-        AdSetFields::TARGETING => $targeting,
-        AdsetFields::PROMOTED_OBJECT =>
-          array('product_set_id' => $this->productSet->{ProductSetFields::ID})
-      ));
+      AdSetFields::NAME => $this->getConfig()->testRunId,
+      AdSetFields::OPTIMIZATION_GOAL => OptimizationGoals::LINK_CLICKS,
+      AdSetFields::BILLING_EVENT => BillingEvents::IMPRESSIONS,
+      AdSetFields::BID_AMOUNT => 2,
+      AdSetFields::DAILY_BUDGET => 2000,
+      AdSetFields::CAMPAIGN_GROUP_ID =>
+        $this->adCampaign->{AdCampaignFields::ID},
+      AdSetFields::TARGETING => $targeting,
+      AdsetFields::PROMOTED_OBJECT =>
+        array(
+          'product_set_id' => $this->productSet->{ProductSetFields::ID},
+        ),
+    ));
     $this->assertCanCreate($this->adSet);
 
     $template = new TemplateData();
@@ -223,31 +226,30 @@ class DynamicProductAdsAdvertTest extends AbstractCrudObjectTestCase {
       TemplateDataFields::MAX_PRODUCT_COUNT => 3,
       TemplateDataFields::CALL_TO_ACTION => array(
         'type' => CallToActionTypes::SHOP_NOW
-      )
+      ),
     ));
 
     $story = new ObjectStorySpec();
     $story->setData(array(
-      ObjectStorySpecFields::PAGE_ID => $this->getPageId(),
+      ObjectStorySpecFields::PAGE_ID => $this->getConfig()->pageId,
       ObjectStorySpecFields::TEMPLATE_DATA => $template,
     ));
 
-    $this->creative = new AdCreative(null, $this->getActId());
+    $this->creative = new AdCreative(null, $this->getConfig()->accountId);
     $this->creative->setData(array(
-      AdCreativeFields::NAME => 'DPA Test Creative 1 '.$this->getTestRunId(),
+      AdCreativeFields::NAME => $this->getConfig()->testRunId,
       AdCreativeFields::OBJECT_STORY_SPEC => $story,
       AdCreativeFields::PRODUCT_SET_ID =>
         $this->productSet->{ProductSetFields::ID},
     ));
     $this->assertCanCreate($this->creative);
 
-    $this->adGroup = new AdGroup(null, $this->getActId());
+    $this->adGroup = new AdGroup(null, $this->getConfig()->accountId);
     $this->adGroup->setData(array(
-      AdGroupFields::NAME => 'DPA Test Ad 1 '.$this->getTestRunId(),
+      AdGroupFields::NAME => 'DPA Test Ad 1 '.$this->getConfig()->testRunId,
       AdGroupFields::CAMPAIGN_ID => $this->adSet->{AdSetFields::ID},
       AdGroupFields::CREATIVE =>
         array('creative_id' => $this->creative->{AdCreativeFields::ID}),
-      AdGroupFields::OBJECTIVE => AdObjectives::PRODUCT_CATALOG_SALES
     ));
     $this->assertCanCreate($this->adGroup);
   }

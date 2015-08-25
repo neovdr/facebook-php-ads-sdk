@@ -24,24 +24,23 @@
 
 namespace FacebookAdsTest\Object;
 
-use FacebookAds\Object\AbstractAsyncJobObject;
 use FacebookAds\Object\AdAccount;
-use FacebookAds\Object\AsyncJobInsights;
-use FacebookAds\Object\AsyncJobReportStats;
 use FacebookAds\Object\Fields\AdAccountFields;
-use FacebookAds\Object\Fields\InsightsFields;
+use FacebookAds\Object\Values\AdAccountRoles;
+use FacebookAds\Object\Fields\TargetingSpecsFields;
+use FacebookAds\Object\TargetingSpecs;
 
 class AdAccountTest extends AbstractCrudObjectTestCase {
 
   public function testCrud() {
-    $account = new AdAccount($this->getActId());
+    $account = new AdAccount($this->getConfig()->accountId);
 
     $this->assertCanRead($account);
     $name = $account->read(array(AdAccountFields::NAME))
       ->{AdAccountFields::NAME};
     $this->assertCanUpdate(
       $account,
-      array(AdAccountFields::NAME => $this->getTestRunId()));
+      array(AdAccountFields::NAME => $this->getConfig()->testRunId));
 
     // Restore original account name
     $account->{AdAccountFields::NAME} = $name;
@@ -53,19 +52,17 @@ class AdAccountTest extends AbstractCrudObjectTestCase {
     $this->assertCanFetchConnection($account, 'getAdUsers');
     $this->assertCanFetchConnection($account, 'getAdCampaigns');
     $this->assertCanFetchConnection($account, 'getAdSets');
-    $this->assertCanFetchConnection($account, 'getAdCampaignStats');
     $this->assertCanFetchConnection($account, 'getAdGroups');
-    $this->assertCanFetchConnection($account, 'getAdGroupStats');
     $this->assertCanFetchConnection($account, 'getAdCreatives');
     $this->assertCanFetchConnection($account, 'getAdImages');
     $this->assertCanFetchConnection($account, 'getAdsPixels');
-    $this->assertCanFetchConnection($account, 'getAdTags');
     $this->assertCanFetchConnection($account, 'getAdVideos');
     $this->assertCanFetchConnection($account, 'getBroadCategoryTargeting');
     $this->assertCanFetchConnection($account, 'getConnectionObjects');
     $this->assertCanFetchConnection($account, 'getCustomAudiences');
     $this->assertCanFetchConnection($account, 'getConversionPixels');
     $this->assertCanFetchConnection($account, 'getRateCards');
+    $this->assertCanFetchConnection($account, 'getAdCreativesByLabel');
 
     if (!$this->shouldSkipTest('no_reach_and_frequency')) {
       $this->assertCanFetchConnection($account, 'getReachEstimate',
@@ -75,21 +72,31 @@ class AdAccountTest extends AbstractCrudObjectTestCase {
             array('countries' => array('US')))));
     }
 
-    $report_stats_params = array(
-      'date_preset' => 'yesterday',
-      'data_columns' => "['campaign_name','reach','actions','spend', 'clicks']"
-    );
+    $targeting = new TargetingSpecs();
+    $targeting->setData(array(
+      TargetingSpecsFields::GEO_LOCATIONS =>
+        array('countries' => array('US', 'JP')),
+      TargetingSpecsFields::GENDERS => array(1),
+      TargetingSpecsFields::AGE_MIN => 20,
+      TargetingSpecsFields::AGE_MAX => 24,
+    ));
+    $params = array('targeting_spec' => $targeting->exportData());
+    $this->assertCanFetchConnection(
+      $account, 'getTargetingDescription', array(), $params);
 
-    $this->assertCanFetchConnection(
-      $account, 'getReportsStats', array(), $report_stats_params);
-    $this->assertCanFetchConnection(
-      $account, 'getReportStatsAsync', array(), $report_stats_params);
-    $this->assertCanFetchConnection($account, 'getStats');
     $this->assertCanFetchConnection($account, 'getTransactions');
-    $this->assertCanFetchConnection($account, 'getConversions');
-    $this->assertCanFetchConnection($account, 'getAdCampaignConversions');
-    $this->assertCanFetchConnection($account, 'getAdGroupConversions');
+    $this->assertCanFetchConnection($account, 'getAgencies');
     $this->assertCanFetchConnection($account, 'getInsights');
     $this->assertCanFetchConnection($account, 'getInsightsAsync');
+
+    if (!$this->getSkippableFeaturesManager()
+      ->isSkipKey('no_business_manager')) {
+
+      $account->grantAgencyAcccess(
+        $this->getConfig()->secondaryBusinessId,
+        array(AdAccountRoles::GENERAL_USER));
+
+      $account->revokeAgencyAccess($this->getConfig()->secondaryBusinessId);
+    }
   }
 }

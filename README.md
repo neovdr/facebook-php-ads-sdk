@@ -21,7 +21,7 @@ Add the following to your `composer.json` file:
 ```json
 {
     "require": {
-        "facebook/php-ads-sdk": "2.3.*"
+        "facebook/php-ads-sdk": "2.4.*"
     }
 }
 ```
@@ -168,7 +168,7 @@ use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AdCampaignFields;
 
 $account = new AdAccount('<ACT_ID>');
-$cursor = $account->getCampaigns();
+$cursor = $account->getAdCampaigns();
 
 // Loop over objects
 foreach ($cursor as $campaign) {

@@ -22,24 +22,8 @@
  *
  */
 
-namespace FacebookAdsTest\Object;
+namespace FacebookAds\Object;
 
-use FacebookAds\Object\AdAccount;
-use FacebookAds\Object\AsyncJobReportStats;
+class Client extends AbstractObject {
 
-class AsyncJobReportStatsTest extends AbstractAsyncJobTestCase {
-
-  public function testCrud() {
-    $account = new AdAccount($this->getConfig()->accountId);
-
-    $report_stats_params = array(
-      'date_preset' => 'yesterday',
-      'data_columns' => "['campaign_name','reach','actions','spend', 'clicks']"
-    );
-
-    $job = $account->getReportStatsAsync(array(), $report_stats_params);
-    $this->assertTrue($job instanceof AsyncJobReportStats);
-    $this->waitTillJobComplete($job);
-    $job->getResult();
-  }
 }

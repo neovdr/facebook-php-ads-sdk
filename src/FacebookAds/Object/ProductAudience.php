@@ -25,28 +25,20 @@
 namespace FacebookAds\Object;
 
 use FacebookAds\Object\Fields\ProductAudienceFields;
-use FacebookAds\Object\Traits\FieldValidation;
 
 class ProductAudience extends AbstractCrudObject {
-  use FieldValidation;
-
-  /**
-   * @var string[]
-   */
-  protected static $fields = array(
-    ProductAudienceFields::ID,
-    ProductAudienceFields::NAME,
-    ProductAudienceFields::DESCRIPTION,
-    ProductAudienceFields::PRODUCT_SET_ID,
-    ProductAudienceFields::PIXEL_ID,
-    ProductAudienceFields::INCLUSIONS,
-    ProductAudienceFields::EXCLUSIONS,
-  );
 
   /**
    * @return string
    */
   protected function getEndpoint() {
     return 'product_audiences';
+  }
+
+  /**
+   * @return ProductAudienceFields
+   */
+  public static function getFieldsEnum() {
+    return ProductAudienceFields::getInstance();
   }
 }

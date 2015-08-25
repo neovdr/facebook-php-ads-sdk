@@ -22,9 +22,8 @@
  *
  */
 
-namespace FacebookAds\Object\Fields;
+namespace FacebookAds\Object;
 
-abstract class AdTagFields {
-  const ID = 'id';
-  const NAME = 'name';
+class CreditCard extends AbstractObject {
+
 }

@@ -24,7 +24,12 @@
 
 namespace FacebookAds\Object\Values;
 
-abstract class CustomAudienceTypes {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static CustomAudienceTypes getInstance()
+ */
+class CustomAudienceTypes extends AbstractEnum {
 
   /**
    * @var string

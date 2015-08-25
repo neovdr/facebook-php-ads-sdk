@@ -24,12 +24,16 @@
 
 namespace FacebookAds\Object\Fields;
 
-abstract class AdGroupFields {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static AdGroupFields getInstance()
+ */
+class AdGroupFields extends AbstractEnum {
 
   const ACCOUNT_ID = 'account_id';
   const ADGROUP_STATUS = 'adgroup_status';
-  const BID_TYPE = 'bid_type';
-  const BID_INFO = 'bid_info';
+  const BID_AMOUNT = 'bid_amount';
   const CAMPAIGN_ID = 'campaign_id';
   const CAMPAIGN_GROUP_ID = 'campaign_group_id';
   const CONVERSION_SPECS = 'conversion_specs';
@@ -37,6 +41,7 @@ abstract class AdGroupFields {
   const ADGROUP_REVIEW_FEEDBACK = 'adgroup_review_feedback';
   const ID = 'id';
   const NAME = 'name';
+  const RTB_FLAG = 'rtb_flag';
   const TARGETING = 'targeting';
   const TRACKING_SPECS = 'tracking_specs';
   const UPDATED_TIME = 'updated_time';
@@ -45,4 +50,7 @@ abstract class AdGroupFields {
   const SOCIAL_PREFS = 'social_prefs';
   const FAILED_DELIVERY_CHECKS = 'failed_delivery_checks';
   const REDOWNLOAD = 'redownload';
+  const ADLABELS = 'adlabels';
+  const ENGAGEMENT_AUDIENCE = 'engagement_audience';
+  const EXECUTION_OPTIONS = 'execution_options';
 }

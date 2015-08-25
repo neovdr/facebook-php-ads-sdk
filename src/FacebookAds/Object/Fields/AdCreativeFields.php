@@ -24,7 +24,12 @@
 
 namespace FacebookAds\Object\Fields;
 
-abstract class AdCreativeFields {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static AdCreativeFields getInstance()
+ */
+class AdCreativeFields extends AbstractEnum {
 
   const ID = 'id';
   const TITLE = 'title';
@@ -52,4 +57,8 @@ abstract class AdCreativeFields {
   const LINK_DEEP_LINK_URL = 'link_deep_link_url';
   const CALL_TO_ACTION_TYPE = 'call_to_action_type';
   const OBJECT_TYPE = 'object_type';
+  const ADLABELS = 'adlabels';
+  const TEMPLATE_URL = 'template_url';
+  const APPLINK_TREATMENT = 'applink_treatment';
+  const RUN_STATUS = 'run_status';
 }

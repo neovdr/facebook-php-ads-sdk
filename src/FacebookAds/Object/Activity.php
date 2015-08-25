@@ -24,6 +24,14 @@
 
 namespace FacebookAds\Object;
 
+use FacebookAds\Object\Fields\ActivityFields;
+
 class Activity extends AbstractObject {
 
+  /**
+   * @return ActivityFields
+   */
+  public static function getFieldsEnum() {
+    return ActivityFields::getInstance();
+  }
 }

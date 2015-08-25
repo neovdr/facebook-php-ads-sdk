@@ -30,20 +30,22 @@ use FacebookAds\Object\Fields\AdCampaignFields;
 class AdCampaignTest extends AbstractCrudObjectTestCase {
 
   public function testCrud() {
-    $campaign = new AdCampaign(null, $this->getActId());
-    $campaign->{AdCampaignFields::NAME} = $this->getTestRunId();
+    $campaign = new AdCampaign(null, $this->getConfig()->accountId);
+    $campaign->{AdCampaignFields::NAME} = $this->getConfig()->testRunId;
     
     $this->assertCanCreate($campaign);
     $this->assertCanRead($campaign);
     $this->assertCanUpdate(
       $campaign,
-      array(AdCampaignFields::NAME => $this->getTestRunId().' updated'));
+      array(
+        AdCampaignFields::NAME => $this->getConfig()->testRunId.' updated',
+      ));
     $this->assertCanFetchConnection($campaign, 'getAdSets');
     $this->assertCanFetchConnection($campaign, 'getAdGroups');
-    $this->assertCanFetchConnection($campaign, 'getStats');
     $this->assertCanFetchConnection($campaign, 'getInsights');
     $this->assertCanFetchConnection($campaign, 'getInsightsAsync');
 
+    $this->assertCanBeLabeled($campaign);
     $this->assertCanArchive($campaign);
 
     $this->assertCanDelete($campaign);

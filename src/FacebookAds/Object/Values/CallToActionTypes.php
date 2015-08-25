@@ -24,14 +24,22 @@
 
 namespace FacebookAds\Object\Values;
 
-abstract class CallToActionTypes {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static CallToActionTypes getInstance()
+ */
+class CallToActionTypes extends AbstractEnum {
 
   const BOOK_TRAVEL = 'BOOK_TRAVEL';
   const CALL_NOW = 'CALL_NOW';
+  const GET_DIRECTIONS = 'GET_DIRECTIONS';
   const LISTEN_MUSIC = 'LISTEN_MUSIC';
+  const MESSAGE_PAGE = 'MESSAGE_PAGE';
   const OPEN_LINK = 'OPEN_LINK';
   const PLAY_GAME = 'PLAY_GAME';
   const SHOP_NOW = 'SHOP_NOW';
   const USE_APP = 'USE_APP';
   const WATCH_VIDEO = 'WATCH_VIDEO';
+  const LEARN_MORE = 'LEARN_MORE';
 }

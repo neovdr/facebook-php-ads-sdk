@@ -28,9 +28,12 @@ use FacebookAds\Cursor;
 use FacebookAds\Object\Fields\AdCampaignFields;
 use FacebookAds\Object\Traits\FieldValidation;
 use FacebookAds\Object\Traits\ObjectValidation;
+use FacebookAds\Object\Traits\AdLabelAwareCrudObjectTrait;
 
 class AdCampaign extends AbstractArchivableCrudObject {
-  use FieldValidation, ObjectValidation;
+  use FieldValidation;
+  use ObjectValidation;
+  use AdLabelAwareCrudObjectTrait;
 
   /**
    * @var string
@@ -43,24 +46,17 @@ class AdCampaign extends AbstractArchivableCrudObject {
   const STATUS_PAUSED = 'PAUSED';
 
   /**
-   * @var string[]
-   */
-  protected static $fields = array(
-    AdCampaignFields::ID,
-    AdCampaignFields::ACCOUNT_ID,
-    AdCampaignFields::OBJECTIVE,
-    AdCampaignFields::NAME,
-    AdCampaignFields::STATUS,
-    AdCampaignFields::BUYING_TYPE,
-    AdCampaignFields::PROMOTED_OBJECT,
-    AdCampaignFields::SPEND_CAP,
-  );
-
-  /**
    * @return string
    */
   protected function getEndpoint() {
     return 'adcampaign_groups';
+  }
+
+  /**
+   * @return AdCampaignFields
+   */
+  public static function getFieldsEnum() {
+    return AdCampaignFields::getInstance();
   }
 
   /**
@@ -108,15 +104,5 @@ class AdCampaign extends AbstractArchivableCrudObject {
     array $fields = array(), array $params = array()) {
     return $this->createAsyncJob(
       AsyncJobInsights::className(), $fields, $params);
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return Cursor
-   */
-  public function getStats(array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      AdStats::className(), $fields, $params, 'stats');
   }
 }

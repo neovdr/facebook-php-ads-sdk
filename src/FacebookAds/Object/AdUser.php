@@ -38,20 +38,17 @@ class AdUser extends AbstractCrudObject {
   use CannotUpdate;
 
   /**
-   * @var string[]
-   */
-  protected static $fields = array(
-    AdUserFields::ID,
-    AdUserFields::NAME,
-    AdUserFields::PERMISSIONS,
-    AdUserFields::ROLE,
-  );
-
-  /**
    * @return string
    */
   protected function getEndpoint() {
     return 'users';
+  }
+
+  /**
+   * @return AdUserFields
+   */
+  public static function getFieldsEnum() {
+    return AdUserFields::getInstance();
   }
 
   /**
@@ -62,5 +59,18 @@ class AdUser extends AbstractCrudObject {
   public function getAdAccounts(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(AdAccount::className(), $fields, $params);
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getAdAccountGroups(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      AdAccountGroup::className(),
+      $fields,
+      $params);
   }
 }

@@ -49,6 +49,12 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase {
     return $this->getSkippableFeaturesManager()->isSkipKey($key);
   }
 
+  public function skipIf($key) {
+    if ($this->shouldSkipTest($key)) {
+      $this->markTestSkipped();
+    }
+  }
+
   /**
    * @return Config
    */
@@ -100,5 +106,26 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase {
     $mock->method('getIterator')->willReturn(new \ArrayIterator($data));
     $mock->method('getArrayCopy')->willReturn($data);
     $mock->method('export')->willReturn($data);
+  }
+
+  /**
+   * @param \Closure $closure
+   * @param string $fqn
+   */
+  protected function assertWillThrow(
+    \Closure $closure,
+    $fqn = 'Exception') {
+
+    try {
+      call_user_func($closure);
+    } catch (\Exception $e) {
+      $this->assertTrue(
+        is_a($e, $fqn),
+        'Expected exception of type '.$fqn.': '.get_class($e).' received');
+
+      return;
+    }
+
+    $this->fail('Expected exception didn\'t throw: '.$fqn);
   }
 }

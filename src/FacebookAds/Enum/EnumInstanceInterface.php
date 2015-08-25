@@ -22,48 +22,70 @@
  *
  */
 
-namespace FacebookAds\Object;
+namespace FacebookAds\Enum;
 
-use FacebookAds\Cursor;
-use FacebookAds\Http\RequestInterface;
-
-class AsyncJobReportStats extends AbstractAsyncJobObject {
+interface EnumInstanceInterface {
 
   /**
-   * @return string
+   * @return EnumInstanceInterface
    */
-  protected function getCreateIdFieldName() {
-    return 'id';
-  }
+  public static function getInstance();
 
   /**
-   * @return string
+   * @return array
    */
-  public function getEndpoint() {
-    return 'reportstats';
-  }
+  public function getArrayCopy();
 
   /**
-   * @param array $fields
-   * @param array $params
-   * @return Cursor
+   * @return array
    */
-  public function getResult(
-    array $fields = array(), array $params = array()) {
-    $fields = implode(',', $fields ?: static::getDefaultReadFields());
-    if ($fields) {
-      $params['fields'] = $fields;
-    }
+  public function getNames();
 
-    $params['report_run_id'] = $this->assureId();
+  /**
+   * @return array
+   */
+  public function getValues();
 
-    $response = $this->getApi()->call(
-      '/' . $this->assureParentId() . '/reportstats',
-      RequestInterface::METHOD_GET,
-      $params);
+  /**
+   * @return array
+   */
+  public function getValuesMap();
 
-    $prototype = new AdStats(null, $this->{static::FIELD_ID}, $this->getApi());
+  /**
+   * @param string|int|float $name
+   * @return mixed
+   */
+  public function getValueForName($name);
 
-    return new Cursor($response, $prototype);
-  }
+  /**
+   * @param string|int|float $name
+   * @return mixed
+   * @throws \InvalidArgumentException
+   */
+  public function assureValueForName($name);
+
+  /**
+   * @param string|int|float $name
+   * @return bool
+   */
+  public function isValid($name);
+
+  /**
+   * @param string|int|float $name
+   * @return void
+   * @throws \InvalidArgumentException
+   */
+  public function assureIsValid($name);
+
+  /**
+   * @param mixed $value
+   * @return bool
+   */
+  public function isValidValue($value);
+
+  /**
+   * @param mixed $value
+   * @throws \InvalidArgumentException
+   */
+  public function assureIsValidValue($value);
 }

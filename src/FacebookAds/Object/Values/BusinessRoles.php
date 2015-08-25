@@ -22,13 +22,18 @@
  *
  */
 
-namespace FacebookAds\Object\Fields;
+namespace FacebookAds\Object\Values;
 
-abstract class BidInfoFields {
+use FacebookAds\Enum\AbstractEnum;
 
-  const REACH = 'REACH';
-  const SOCIAL = 'SOCIAL';
-  const CLICKS = 'CLICKS';
-  const ACTIONS = 'ACTIONS';
-  const IMPRESSIONS = 'IMPRESSIONS';
+/**
+ * @method static BusinessRoles getInstance()
+ */
+class BusinessRoles extends AbstractEnum {
+
+  const ADMIN  = 'ADMIN';
+  const EMPLOYEE = 'EMPLOYEE';
+  const OWNER = 'OWNER';
+  const AGENCY = 'AGENCY';
+
 }

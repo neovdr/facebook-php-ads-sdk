@@ -27,10 +27,12 @@ namespace FacebookAds\Object;
 use FacebookAds\Cursor;
 use FacebookAds\Object\Fields\AdGroupFields;
 use FacebookAds\Object\Traits\FieldValidation;
+use FacebookAds\Object\Traits\AdLabelAwareCrudObjectTrait;
 
 class AdGroup extends AbstractArchivableCrudObject
   implements CanRedownloadInterface {
   use FieldValidation;
+  use AdLabelAwareCrudObjectTrait;
 
   /**
    * @var string
@@ -93,35 +95,17 @@ class AdGroup extends AbstractArchivableCrudObject
   const STATUS_ARCHIVED = 'ARCHIVED';
 
   /**
-   * @var string[]
-   */
-  protected static $fields = array(
-    AdGroupFields::ID,
-    AdGroupFields::ACCOUNT_ID,
-    AdGroupFields::ADGROUP_STATUS,
-    AdGroupFields::ADGROUP_REVIEW_FEEDBACK,
-    AdGroupFields::BID_TYPE,
-    AdGroupFields::BID_INFO,
-    AdGroupFields::CAMPAIGN_ID,
-    AdGroupFields::CAMPAIGN_GROUP_ID,
-    AdGroupFields::CONVERSION_SPECS,
-    AdGroupFields::CREATED_TIME,
-    AdGroupFields::FAILED_DELIVERY_CHECKS,
-    AdGroupFields::NAME,
-    AdGroupFields::TARGETING,
-    AdGroupFields::TRACKING_SPECS,
-    AdGroupFields::UPDATED_TIME,
-    AdGroupFields::VIEW_TAGS,
-    AdGroupFields::CREATIVE,
-    AdGroupFields::REDOWNLOAD,
-    AdGroupFields::SOCIAL_PREFS,
-  );
-
-  /**
    * @return string
    */
   protected function getEndpoint() {
     return 'adgroups';
+  }
+
+  /**
+   * @return AdGroupFields
+   */
+  public static function getFieldsEnum() {
+    return AdGroupFields::getInstance();
   }
 
   /**
@@ -145,7 +129,7 @@ class AdGroup extends AbstractArchivableCrudObject
   /**
    * @param array $fields
    * @param array $params
-   * @return Cursor
+   * @return TargetingDescription
    */
   public function getTargetingDescription(
     array $fields = array(), array $params = array()) {
@@ -155,17 +139,6 @@ class AdGroup extends AbstractArchivableCrudObject
       $params,
       'targetingsentencelines'
     );
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return Cursor
-   */
-  public function getKeywordStat(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      AdStats::className(), $fields, $params, 'keywordstats');
   }
 
   /**
@@ -193,33 +166,12 @@ class AdGroup extends AbstractArchivableCrudObject
   /**
    * @param array $fields
    * @param array $params
-   * @return AdStats
-   */
-  public function getStats(array $fields = array(), array $params = array()) {
-    return $this->getOneByConnection(
-      AdStats::className(), $fields, $params, 'stats');
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
    * @return Cursor
    */
   public function getClickTrackingTag(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
       ClickTrackingTag::className(), $fields, $params, 'trackingtag');
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   * @return AdStats
-   */
-  public function getConversions(
-    array $fields = array(), array $params = array()) {
-    return $this->getOneByConnection(
-      AdStats::className(), $fields, $params, 'conversions');
   }
 
   /**

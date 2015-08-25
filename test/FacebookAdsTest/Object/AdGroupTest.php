@@ -34,10 +34,14 @@ use FacebookAds\Object\Fields\AdCreativeFields;
 use FacebookAds\Object\Fields\AdGroupFields;
 use FacebookAds\Object\Fields\AdImageFields;
 use FacebookAds\Object\Fields\AdSetFields;
-use FacebookAds\Object\Fields\BidInfoFields;
+use FacebookAds\Object\Fields\ObjectStory\LinkDataFields;
+use FacebookAds\Object\Fields\ObjectStorySpecFields;
+use FacebookAds\Object\ObjectStory\LinkData;
+use FacebookAds\Object\ObjectStorySpec;
 use FacebookAds\Object\TargetingSpecs;
 use FacebookAds\Object\Fields\TargetingSpecsFields;
-use FacebookAds\Object\Values\BidTypes;
+use FacebookAds\Object\Values\BillingEvents;
+use FacebookAds\Object\Values\OptimizationGoals;
 use FacebookAdsTest\Config\SkippableFeatureTestInterface;
 
 class AdGroupTest extends AbstractCrudObjectTestCase
@@ -74,17 +78,18 @@ class AdGroupTest extends AbstractCrudObjectTestCase
     parent::setup();
 
     $targeting = new TargetingSpecs();
-    $targeting->{TargetingSpecsFields::GEO_LOCATIONS}
-      = array('countries' => array('US'));
+    $targeting->{TargetingSpecsFields::GEO_LOCATIONS} = array(
+      'countries' => array('US'),
+    );
 
-    $this->adCampaign = new AdCampaign(null, $this->getActId());
-    $this->adCampaign->{AdCampaignFields::NAME} = $this->getTestRunId();
+    $this->adCampaign = new AdCampaign(null, $this->getConfig()->accountId);
+    $this->adCampaign->{AdCampaignFields::NAME} = $this->getConfig()->testRunId;
     $this->adCampaign->create();
 
-    $this->adSet = new AdSet(null, $this->getActId());
+    $this->adSet = new AdSet(null, $this->getConfig()->accountId);
     $this->adSet->{AdSetFields::CAMPAIGN_GROUP_ID}
       = (int) $this->adCampaign->{AdSetFields::ID};
-    $this->adSet->{AdSetFields::NAME} = $this->getTestRunId();
+    $this->adSet->{AdSetFields::NAME} = $this->getConfig()->testRunId;
     $this->adSet->{AdSetFields::CAMPAIGN_STATUS} = AdSet::STATUS_PAUSED;
     $this->adSet->{AdSetFields::DAILY_BUDGET} = '150';
     $this->adSet->{AdSetFields::START_TIME}
@@ -92,19 +97,27 @@ class AdGroupTest extends AbstractCrudObjectTestCase
     $this->adSet->{AdSetFields::END_TIME}
       = (new \DateTime("+2 week"))->format(\DateTime::ISO8601);
     $this->adSet->{AdSetFields::TARGETING} = $targeting;
-    $this->adSet->{AdSetFields::BID_TYPE} = BidTypes::BID_TYPE_CPM;
-    $this->adSet->{AdSetFields::BID_INFO}
-      = array(BidInfoFields::IMPRESSIONS => 2);
+    $this->adSet->{AdSetFields::OPTIMIZATION_GOAL} = OptimizationGoals::REACH;
+    $this->adSet->{AdSetFields::BILLING_EVENT} = BillingEvents::IMPRESSIONS;
+    $this->adSet->{AdSetFields::BID_AMOUNT} = 2;
     $this->adSet->save();
 
-    $this->adImage = new AdImage(null, $this->getActId());
-    $this->adImage->{AdImageFields::FILENAME} = $this->getTestImagePath();
+    $this->adImage = new AdImage(null, $this->getConfig()->accountId);
+    $this->adImage->{AdImageFields::FILENAME}
+      = $this->getConfig()->testImagePath;
     $this->adImage->save();
 
-    $this->adCreative = new AdCreative(null, $this->getActId());
-    $this->adCreative->{AdCreativeFields::TITLE} = 'My Test Ad';
-    $this->adCreative->{AdCreativeFields::BODY} = 'My Test Ad Body';
-    $this->adCreative->{AdCreativeFields::OBJECT_ID} = $this->getPageId();
+    $link = new LinkData();
+    $link->{LinkDataFields::MESSAGE} = 'Message';
+    $link->{LinkDataFields::IMAGE_HASH} = $this->adImage->{AdImageFields::HASH};
+    $link->{LinkDataFields::LINK} = $this->getConfig()->appUrl;
+
+    $story = new ObjectStorySpec();
+    $story->{ObjectStorySpecFields::PAGE_ID} = $this->getConfig()->pageId;
+    $story->{ObjectStorySpecFields::LINK_DATA} = $link;
+
+    $this->adCreative = new AdCreative(null, $this->getConfig()->accountId);
+    $this->adCreative->{AdCreativeFields::OBJECT_STORY_SPEC} = $story;
     $this->adCreative->create();
   }
 
@@ -134,9 +147,9 @@ class AdGroupTest extends AbstractCrudObjectTestCase
 
   public function testCrudAccess() {
 
-    $group = new AdGroup(null, $this->getActId());
+    $group = new AdGroup(null, $this->getConfig()->accountId);
     $group->{AdGroupFields::ADGROUP_STATUS} = AdGroup::STATUS_PAUSED;
-    $group->{AdGroupFields::NAME} = $this->getTestRunId();
+    $group->{AdGroupFields::NAME} = $this->getConfig()->testRunId;
     $group->{AdGroupFields::CAMPAIGN_ID}
       = (int) $this->adSet->{AdSetFields::ID};
     $group->{AdGroupFields::CREATIVE}
@@ -145,12 +158,11 @@ class AdGroupTest extends AbstractCrudObjectTestCase
     $this->assertCanCreate($group);
     $this->assertCanRead($group);
     $this->assertCanUpdate($group, array(
-      AdGroupFields::NAME => $this->getTestRunId().' updated',
+      AdGroupFields::NAME => $this->getConfig()->testRunId.' updated',
     ));
 
     $this->assertCanFetchConnection($group, 'getAdCreatives');
     $this->assertCanFetchConnection($group, 'getTargetingDescription');
-    $this->assertCanFetchConnection($group, 'getKeywordStat');
     $this->assertCanFetchConnection($group, 'getAdPreviews',
       array(),
       array('ad_format' => 'RIGHT_COLUMN_STANDARD'));
@@ -158,12 +170,11 @@ class AdGroupTest extends AbstractCrudObjectTestCase
     if (!$this->shouldSkipTest('no_reach_and_frequency')) {
       $this->assertCanFetchConnection($group, 'getReachEstimate');
     }
-    $this->assertCanFetchConnection($group, 'getStats');
     $this->assertCanFetchConnection($group, 'getClickTrackingTag');
-    $this->assertCanFetchConnection($group, 'getConversions');
     $this->assertCanFetchConnection($group, 'getInsights');
     $this->assertCanFetchConnection($group, 'getInsightsAsync');
 
+    $this->assertCanBeLabeled($group);
     $this->assertCanArchive($group);
 
     $this->assertCanDelete($group);

@@ -24,7 +24,12 @@
 
 namespace FacebookAds\Object\Fields;
 
-abstract class AdAccountFields {
+use FacebookAds\Enum\AbstractEnum;
+
+/**
+ * @method static AdAccountFields getInstance()
+ */
+class AdAccountFields extends AbstractEnum {
 
   const ACCOUNT_GROUPS = 'account_groups';
   const ACCOUNT_ID = 'account_id';
@@ -35,6 +40,7 @@ abstract class AdAccountFields {
   const BALANCE = 'balance';
   const BUSINESS_CITY = 'business_city';
   const BUSINESS_COUNTRY_CODE = 'business_country_code';
+  const BUSINESS_ID = 'business_id';
   const BUSINESS_NAME = 'business_name';
   const BUSINESS_STATE = 'business_state';
   const BUSINESS_STREET2 = 'business_street2';
@@ -46,7 +52,6 @@ abstract class AdAccountFields {
   const PARTNER = 'partner';
   const CAPABILITIES = 'capabilities';
   const CURRENCY = 'currency';
-  const DAILY_SPEND_LIMIT = 'daily_spend_limit';
   const ID = 'id';
   const IS_PERSONAL = 'is_personal';
   const NAME = 'name';
@@ -61,4 +66,7 @@ abstract class AdAccountFields {
   const TOS_ACCEPTED = 'tos_accepted';
   const USERS = 'users';
   const TAX_ID_STATUS = 'tax_id_status';
+  const ADLABELS = 'adlabels';
+  const MIN_DAILY_BUDGET = 'min_daily_budget';
+  const MIN_CAMPAIGN_GROUP_SPEND_CAP = 'min_campaign_group_spend_cap';
 }

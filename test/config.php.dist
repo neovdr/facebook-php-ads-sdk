@@ -42,6 +42,11 @@ return array(
   'access_token' => '',
 
   /**
+   * @var string Numeric Facebook Business Manager id, espressed as string
+   */
+  'business_id' => '',
+
+  /**
    * @var string Numeric Facebook id, preceded by 'act_', espressed as string
    * @see https://www.facebook.com/ads/manage/home/
    */
@@ -54,7 +59,7 @@ return array(
   'act_timezone' => '',
 
   /**
-   * @var string Numeric Facebook id, preceded by 'act_', espressed as string
+   * @var string Numeric Facebook id, espressed as string
    * @see https://www.facebook.com/ads/manage/home/
    */
   'page_id' => '',
@@ -66,14 +71,15 @@ return array(
    */
   'app_url' => '',
 
-  /**
-   * @var string Numeric Facebook Business Manager id, espressed as string
-   */
-  'business_manager_id' => '',
-
   // OPTIONAL INTEGRATION TESTS
 
   'skip_if' => array(
+
+    /**
+     * @var bool Skip tests that require an business manager
+     * @see https://developers.facebook.com/docs/marketing-api/businessmanager/
+     */
+    'no_business_manager' => true,
 
     /**
      * @var bool Skip tests that require an account with a valid payment method
@@ -122,4 +128,27 @@ return array(
    *             Tip: access std streams with 'php://stdout' or 'php://stderr'
    */
   'curl_logger' => '',
+
+  // OPTIONAL SECONDARY ENTITIES
+  // Do not set the same as primary. May incurr in lost permissions.
+
+  /**
+   * @var string Ausiliary Business ID for permissions and sharing testing
+   */
+  'secondary_business_id' => '',
+
+  /**
+   * @var string Ausiliary Account ID for permissions and sharing testing
+   */
+  'secondary_account_id' => '',
+
+  /**
+   * @var string Ausiliary Page ID for permissions and sharing testing
+   */
+  'secondary_page_id' => '',
+
+  /**
+   * @var string Ausiliary Page ID for permissions and sharing testing
+   */
+  'secondary_app_id' => '',
 );
