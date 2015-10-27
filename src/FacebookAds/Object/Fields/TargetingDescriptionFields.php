@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -22,32 +22,15 @@
  *
  */
 
-namespace FacebookAdsTest\Object;
+namespace FacebookAds\Object\Fields;
 
-use FacebookAds\Object\AdCampaign;
-use FacebookAds\Object\Fields\AdCampaignFields;
+use FacebookAds\Enum\AbstractEnum;
 
-class AdCampaignTest extends AbstractCrudObjectTestCase {
+/**
+ * @method static TargetingDescriptionFields getInstance()
+ */
+class TargetingDescriptionFields extends AbstractEnum {
 
-  public function testCrud() {
-    $campaign = new AdCampaign(null, $this->getConfig()->accountId);
-    $campaign->{AdCampaignFields::NAME} = $this->getConfig()->testRunId;
-    
-    $this->assertCanCreate($campaign);
-    $this->assertCanRead($campaign);
-    $this->assertCanUpdate(
-      $campaign,
-      array(
-        AdCampaignFields::NAME => $this->getConfig()->testRunId.' updated',
-      ));
-    $this->assertCanFetchConnection($campaign, 'getAdSets');
-    $this->assertCanFetchConnection($campaign, 'getAdGroups');
-    $this->assertCanFetchConnection($campaign, 'getInsights');
-    $this->assertCanFetchConnection($campaign, 'getInsightsAsync');
-
-    $this->assertCanBeLabeled($campaign);
-    $this->assertCanArchive($campaign);
-
-    $this->assertCanDelete($campaign);
-  }
+  const ID = 'id';
+  const TARGETING_SENTENCE_LINES = 'targetingsentencelines';
 }

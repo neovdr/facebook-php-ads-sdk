@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -25,12 +25,40 @@
 namespace FacebookAdsTest\Object;
 
 use FacebookAds\Object\AdAccount;
+use FacebookAds\Object\AdCreative;
+use FacebookAds\Object\AdLabel;
 use FacebookAds\Object\Fields\AdAccountFields;
+use FacebookAds\Object\Fields\AdCreativeFields;
+use FacebookAds\Object\Fields\AdLabelFields;
 use FacebookAds\Object\Values\AdAccountRoles;
 use FacebookAds\Object\Fields\TargetingSpecsFields;
 use FacebookAds\Object\TargetingSpecs;
+use FacebookAds\Object\Values\AdFormats;
+use FacebookAds\Object\Values\OptimizationGoals;
 
 class AdAccountTest extends AbstractCrudObjectTestCase {
+
+  /**
+   * @var AdLabel
+   */
+  protected $adLabel;
+
+  public function setup() {
+    parent::setup();
+
+    $this->adLabel = new AdLabel(null, $this->getConfig()->accountId);
+    $this->adLabel->{AdLabelFields::NAME} = $this->getConfig()->testRunId;
+    $this->adLabel->create();
+  }
+
+  public function tearDown() {
+    if ($this->adLabel !== null) {
+      $this->adLabel->delete();
+      $this->adLabel = null;
+    }
+
+    parent::tearDown();
+  }
 
   public function testCrud() {
     $account = new AdAccount($this->getConfig()->accountId);
@@ -48,30 +76,6 @@ class AdAccountTest extends AbstractCrudObjectTestCase {
 
     $this->assertCannotDelete($account);
 
-    $this->assertCanFetchConnection($account, 'getActivities');
-    $this->assertCanFetchConnection($account, 'getAdUsers');
-    $this->assertCanFetchConnection($account, 'getAdCampaigns');
-    $this->assertCanFetchConnection($account, 'getAdSets');
-    $this->assertCanFetchConnection($account, 'getAdGroups');
-    $this->assertCanFetchConnection($account, 'getAdCreatives');
-    $this->assertCanFetchConnection($account, 'getAdImages');
-    $this->assertCanFetchConnection($account, 'getAdsPixels');
-    $this->assertCanFetchConnection($account, 'getAdVideos');
-    $this->assertCanFetchConnection($account, 'getBroadCategoryTargeting');
-    $this->assertCanFetchConnection($account, 'getConnectionObjects');
-    $this->assertCanFetchConnection($account, 'getCustomAudiences');
-    $this->assertCanFetchConnection($account, 'getConversionPixels');
-    $this->assertCanFetchConnection($account, 'getRateCards');
-    $this->assertCanFetchConnection($account, 'getAdCreativesByLabel');
-
-    if (!$this->shouldSkipTest('no_reach_and_frequency')) {
-      $this->assertCanFetchConnection($account, 'getReachEstimate',
-        array(),
-        array('targeting_spec' =>
-          array('geo_locations' =>
-            array('countries' => array('US')))));
-    }
-
     $targeting = new TargetingSpecs();
     $targeting->setData(array(
       TargetingSpecsFields::GEO_LOCATIONS =>
@@ -80,14 +84,74 @@ class AdAccountTest extends AbstractCrudObjectTestCase {
       TargetingSpecsFields::AGE_MIN => 20,
       TargetingSpecsFields::AGE_MAX => 24,
     ));
-    $params = array('targeting_spec' => $targeting->exportData());
+
+    $creative = (new AdCreative())->setData(array(
+      AdCreativeFields::TITLE => 'My Test Creative',
+      AdCreativeFields::BODY => 'My Test Ad Creative Body',
+      AdCreativeFields::OBJECT_URL => 'https://www.facebook.com/facebook',
+    ));
+
+    $targeting_params = array(
+      'targeting_spec' => $targeting->exportData(),
+    );
+
+    $label_params = array(
+      'ad_label_ids' => array(
+        $this->adLabel->{AdLabelFields::ID},
+      ),
+    );
+
+    $this->assertCanFetchConnection($account, 'getActivities');
+    $this->assertCanFetchConnection($account, 'getAdUsers');
+    $this->assertCanFetchConnection($account, 'getCampaigns');
+    $this->assertCanFetchConnection($account, 'getAdSets');
+    $this->assertCanFetchConnection($account, 'getAds');
+    $this->assertCanFetchConnection($account, 'getAdCreatives');
+    $this->assertCanFetchConnection($account, 'getAdImages');
+    $this->assertCanFetchConnection($account, 'getAdsPixels');
+    $this->assertCanFetchConnection($account, 'getAdVideos');
+    $this->assertCanFetchConnection($account, 'getBroadCategoryTargeting');
+    $this->assertCanFetchConnection($account, 'getConnectionObjects');
+    $this->assertCanFetchConnection($account, 'getCustomAudiences');
+    $this->assertCanFetchConnection($account, 'getConversionPixels');
+    $this->assertCanFetchConnection($account, 'getPartnerCategories');
+    $this->assertCanFetchConnection($account, 'getRateCards');
     $this->assertCanFetchConnection(
-      $account, 'getTargetingDescription', array(), $params);
+      $account,
+      'getReachEstimate',
+      array(),
+      array_merge(
+        $targeting_params,
+        array(
+          'optimize_for' => OptimizationGoals::OFFSITE_CONVERSIONS,
+        )));
+
+    if (!$this->shouldSkipTest('no_reach_and_frequency')) {
+      $this->assertCanFetchConnection($account, 'getReachFrequencyPredictions');
+    }
+
+    $this->assertCanFetchConnection(
+      $account, 'getTargetingDescription', array(), $targeting_params);
 
     $this->assertCanFetchConnection($account, 'getTransactions');
-    $this->assertCanFetchConnection($account, 'getAgencies');
+    $this->assertCanFetchConnection($account, 'getAdPreviews', array(), array(
+      'ad_format' => AdFormats::DESKTOP_FEED_STANDARD,
+      'creative' => $creative->exportData(),
+    ));
     $this->assertCanFetchConnection($account, 'getInsights');
     $this->assertCanFetchConnection($account, 'getInsightsAsync');
+    $this->assertCanFetchConnection($account, 'getAgencies');
+    $this->assertCanFetchConnection($account, 'getMinimumBudgets');
+    $this->assertCanFetchConnection($account, 'getAdLabels');
+    $this->assertCanFetchConnection(
+      $account, 'getCampaignsByLabel', array(), $label_params);
+    $this->assertCanFetchConnection(
+      $account, 'getAdSetsByLabel', array(), $label_params);
+    $this->assertCanFetchConnection(
+      $account, 'getAdsByLabel', array(), $label_params);
+    $this->assertCanFetchConnection(
+      $account, 'getAdCreativesByLabel', array(), $label_params);
+
 
     if (!$this->getSkippableFeaturesManager()
       ->isSkipKey('no_business_manager')) {

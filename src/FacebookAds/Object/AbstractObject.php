@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -60,11 +60,36 @@ abstract class AbstractObject {
   }
 
   /**
+   * @param string $name
+   * @return boolean
+   */
+  public function __isset($name) {
+    return array_key_exists($name, $this->data);
+  }
+
+  /**
    * @param array
    * @return $this
    */
   public function setData(array $data) {
-    $this->data = $data;
+    foreach ($data as $key => $value) {
+      $this->{$key} = $value;
+    }
+
+    return $this;
+  }
+
+  /**
+   * Like setData but will skip field validation
+   *
+   * @param array
+   * @return $this
+   */
+  public function setDataWithoutValidation(array $data) {
+    foreach ($data as $key => $value) {
+      $this->data[$key] = $value;
+    }
+
     return $this;
   }
 

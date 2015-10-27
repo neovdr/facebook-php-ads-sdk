@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -25,8 +25,16 @@
 namespace FacebookAds\Object;
 
 use FacebookAds\Cursor;
+use FacebookAds\Object\Fields\AsyncJobFields;
 
 class AsyncJobInsights extends AbstractAsyncJobObject {
+
+  /**
+   * @return AsyncJobFields
+   */
+  public static function getFieldsEnum() {
+    return AsyncJobFields::getInstance();
+  }
 
   /**
    * @return string

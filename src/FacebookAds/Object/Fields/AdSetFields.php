@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -24,20 +24,17 @@
 
 namespace FacebookAds\Object\Fields;
 
-use FacebookAds\Enum\AbstractEnum;
-
 /**
  * @method static AdSetFields getInstance()
  */
-class AdSetFields extends AbstractEnum {
+class AdSetFields extends AbstractArchivableCrudObjectFields {
 
   const ACCOUNT_ID = 'account_id';
+  const ADSET_SCHEDULE = 'adset_schedule';
   const BID_AMOUNT = 'bid_amount';
   const BILLING_EVENT = 'billing_event';
   const BUDGET_REMAINING = 'budget_remaining';
-  const CAMPAIGN_GROUP_ID = 'campaign_group_id';
-  const CAMPAIGN_SCHEDULE = 'campaign_schedule';
-  const CAMPAIGN_STATUS = 'campaign_status';
+  const CAMPAIGN_ID = 'campaign_id';
   const CREATED_TIME = 'created_time';
   const CREATIVE_SEQUENCE = 'creative_sequence';
   const DAILY_BUDGET = 'daily_budget';

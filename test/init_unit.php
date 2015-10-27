@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -22,14 +22,15 @@
  *
  */
 
-use FacebookAdsTest\Bootstrap;
+namespace FacebookAdsTest\Bootstrap;
 
 error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('GMT');
+if (!ini_get('date.timezone')) {
+  ini_set('date.timezone', 'UTC');
+}
+require_once __DIR__.'/FacebookAdsTest/Bootstrap/Bootstrap.php';
 
-require_once __DIR__.DIRECTORY_SEPARATOR
-  .'FacebookAdsTest'.DIRECTORY_SEPARATOR
-  .'Bootstrap.php';
+$bootstrap = new Bootstrap();
+$bootstrap->init();
 
-Bootstrap::initAutoloader();
-Bootstrap::initUnitConfig();
+return $bootstrap;

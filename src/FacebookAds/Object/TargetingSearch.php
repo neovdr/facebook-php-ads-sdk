@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -53,11 +53,11 @@ class TargetingSearch extends AbstractObject {
         'set as instance in the \FacebookAds\Api');
     }
 
-    $params = array_merge($params, array(
-      'type' => $type,
+    $params['type'] = $type;
+    $params = array_merge($params, array_filter(array(
       'class' => $class,
       'q' => $query,
-    ));
+    )));
 
     $response = $api->call('/search', RequestInterface::METHOD_GET, $params);
     return new Cursor($response, new TargetingSearch());

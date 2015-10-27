@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -39,4 +39,5 @@ class BillingEvents extends AbstractEnum {
   const OFFER_CLAIMS = 'OFFER_CLAIMS';
   const PAGE_LIKES = 'PAGE_LIKES';
   const POST_ENGAGEMENT = 'POST_ENGAGEMENT';
+  const VIDEO_VIEWS = 'VIDEO_VIEWS';
 }

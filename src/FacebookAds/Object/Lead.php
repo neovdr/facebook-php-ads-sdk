@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -22,28 +22,29 @@
  *
  */
 
-namespace FacebookAds\Object\Fields;
+namespace FacebookAds\Object;
 
-use FacebookAds\Enum\AbstractEnum;
+use FacebookAds\Object\Fields\LeadFields;
+use FacebookAds\Object\Traits\CannotCreate;
+use FacebookAds\Object\Traits\CannotDelete;
+use FacebookAds\Object\Traits\CannotUpdate;
 
-/**
- * @method static AdCampaignFields getInstance()
- */
-class AdCampaignFields extends AbstractEnum {
+class Lead extends AbstractCrudObject {
+  use CannotCreate;
+  use CannotUpdate;
+  use CannotDelete;
 
-  const ID = 'id';
-  const ACCOUNT_ID = 'account_id';
-  const OBJECTIVE = 'objective';
-  const NAME = 'name';
-  const STATUS = 'campaign_group_status';
-  const IS_COMPLETED = 'is_completed';
-  const BUYING_TYPE = 'buying_type';
-  const PROMOTED_OBJECT = 'promoted_object';
-  const SPEND_CAP = 'spend_cap';
-  const ADLABELS = 'adlabels';
-  const CREATED_TIME = 'created_time';
-  const START_TIME = 'start_time';
-  const STOP_TIME = 'stop_time';
-  const UPDATED_TIME = 'updated_time';
+  /**
+   * @return string
+   */
+  protected function getEndpoint() {
+    return 'leads';
+  }
 
+  /**
+   * @return LeadFields
+   */
+  public static function getFieldsEnum() {
+    return LeadFields::getInstance();
+  }
 }

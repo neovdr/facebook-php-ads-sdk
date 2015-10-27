@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -126,5 +126,17 @@ class AdsPixel extends AbstractCrudObject {
 
     return $this->getManyByConnection(
       Business::className(), $fields, $params, 'shared_agencies');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getStats(
+    array $fields = array(), array $params = array()) {
+
+    return $this->getManyByConnection(
+      AdsPixelStat::className(), $fields, $params, 'stats');
   }
 }

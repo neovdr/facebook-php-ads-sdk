@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -32,6 +32,6 @@ use FacebookAds\Enum\AbstractEnum;
 class AdBuyingTypes extends AbstractEnum {
 
   const AUCTION  = 'AUCTION';
-  const FIXED_CPM = 'FIXED_CPM';
+  const FIXED_PRICE = 'FIXED_PRICE';
   const RESERVED = 'RESERVED';
 }

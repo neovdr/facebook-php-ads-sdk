@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -80,7 +80,7 @@ class AdAccountGroup extends AbstractCrudObject {
       foreach (array_shift($response_data) as $data) {
         /** @var AbstractObject $object */
         $object = new $prototype_class(null, null, $this->getApi());
-        $object->setData((array) $data);
+        $object->setDataWithoutValidation((array) $data);
         $result[] = $object;
       }
     }

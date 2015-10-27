@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -34,6 +34,17 @@ class Page extends AbstractCrudObject {
    */
   public function getEndpoint() {
     return 'pages';
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getLeadgenForms(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      LeadgenForm::className(), $fields, $params);
   }
 
   /**
@@ -87,7 +98,7 @@ class Page extends AbstractCrudObject {
    */
   public function grantBusinessAccess($business_id, $roles) {
     $params = array(
-      'business_id' => $business_id,
+      'business' => $business_id,
       'permitted_roles' => $roles,
     );
 
@@ -102,7 +113,7 @@ class Page extends AbstractCrudObject {
    */
   public function revokeBusinessAccess($business_id) {
     $params = array(
-      'business_id' => $business_id,
+      'business' => $business_id,
     );
 
     $this->getApi()->call(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -25,6 +25,7 @@
 namespace FacebookAds\Object;
 
 use FacebookAds\Object\Fields\ClickTrackingTagFields;
+use FacebookAds\Http\RequestInterface;
 
 class ClickTrackingTag extends AbstractCrudObject {
 
@@ -40,5 +41,12 @@ class ClickTrackingTag extends AbstractCrudObject {
    */
   public static function getFieldsEnum() {
     return ClickTrackingTagFields::getInstance();
+  }
+
+  public function delete(array $params = array()) {
+    $this->getApi()->call(
+      '/'.$this->parentId.'/'.$this->getEndpoint(),
+      RequestInterface::METHOD_DELETE,
+      $params);
   }
 }

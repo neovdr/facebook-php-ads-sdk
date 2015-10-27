@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -75,10 +75,10 @@ class AdAccount extends AbstractCrudObject {
    * @param array $params
    * @return Cursor
    */
-  public function getAdCampaigns(
+  public function getCampaigns(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
-      AdCampaign::className(), $fields, $params);
+      Campaign::className(), $fields, $params);
   }
 
   /**
@@ -95,9 +95,9 @@ class AdAccount extends AbstractCrudObject {
    * @param array $params
    * @return Cursor
    */
-  public function getAdGroups(
+  public function getAds(
     array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(AdGroup::className(), $fields, $params);
+    return $this->getManyByConnection(Ad::className(), $fields, $params);
   }
 
   /**
@@ -338,6 +338,17 @@ class AdAccount extends AbstractCrudObject {
    * @param array $params
    * @return Cursor
    */
+  public function getMinimumBudgets(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      MinimumBudget::className(), $fields, $params, 'minimum_budgets');
+  }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
   public function getAdLabels(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
@@ -349,10 +360,10 @@ class AdAccount extends AbstractCrudObject {
    * @param array $params
    * @return Cursor
    */
-  public function getAdCampaignsByLabel(
+  public function getCampaignsByLabel(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
-      AdCampaign::classname(), $fields, $params, 'adcampaigngroupsbylabels');
+      Campaign::classname(), $fields, $params, 'campaignsbylabels');
   }
 
   /**
@@ -363,7 +374,7 @@ class AdAccount extends AbstractCrudObject {
   public function getAdSetsByLabel(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
-      AdSet::classname(), $fields, $params, 'adcampaignsbylabels');
+      AdSet::classname(), $fields, $params, 'adsetsbylabels');
   }
 
   /**
@@ -371,10 +382,10 @@ class AdAccount extends AbstractCrudObject {
    * @param array $params
    * @return Cursor
    */
-  public function getAdGroupsByLabel(
+  public function getAdsByLabel(
     array $fields = array(), array $params = array()) {
     return $this->getManyByConnection(
-      AdGroup::classname(), $fields, $params, 'adgroupsbylabels');
+      Ad::classname(), $fields, $params, 'adsbylabels');
   }
 
   /**

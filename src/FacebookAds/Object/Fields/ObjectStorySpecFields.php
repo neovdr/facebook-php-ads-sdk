@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -31,6 +31,7 @@ use FacebookAds\Enum\AbstractEnum;
  */
 class ObjectStorySpecFields extends AbstractEnum {
 
+  const INSTAGRAM_ACTOR_ID = 'instagram_actor_id';
   const LINK_DATA = 'link_data';
   const OFFER_DATA = 'offer_data';
   const PAGE_ID = 'page_id';

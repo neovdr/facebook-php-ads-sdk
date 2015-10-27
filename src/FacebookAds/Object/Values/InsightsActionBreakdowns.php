@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -31,6 +31,8 @@ use FacebookAds\Enum\AbstractEnum;
  */
 class InsightsActionBreakdowns extends AbstractEnum {
 
+  const ACTION_CAROUSEL_CARD_ID = 'action_carousel_card_id';
+  const ACTION_CAROUSEL_CARD_NAME = 'action_carousel_card_name';
   const ACTION_DESTINATION = 'action_destination';
   const ACTION_DEVICE = 'action_device';
   const ACTION_TARGET_ID = 'action_target_id';

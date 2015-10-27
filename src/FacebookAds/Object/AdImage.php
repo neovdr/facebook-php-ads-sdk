@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -138,7 +138,7 @@ class AdImage extends AbstractCrudObject {
 
     $data = $response->getContent()['data'];
     if ($data) {
-      $this->setData((array) $data[0]);
+      $this->setDataWithoutValidation((array) $data[0]);
     }
 
     $this->clearHistory();

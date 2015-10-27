@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -198,18 +198,6 @@ abstract class AbstractCrudObject extends AbstractObject {
   }
 
   /**
-   * @param array $data
-   * @return $this
-   */
-  public function setData(array $data) {
-    foreach ($data as $key => $value) {
-      $this->{$key} = $value;
-    }
-
-    return $this;
-  }
-
-  /**
    * @param string[] $fields
    */
   public static function setDefaultReadFields(array $fields = array()) {
@@ -259,7 +247,7 @@ abstract class AbstractCrudObject extends AbstractObject {
         && isset($data['data'][$id])
         && is_array($data['data'][$id])
       ) {
-        $this->setData($data['data'][$id]);
+        $this->setDataWithoutValidation($data['data'][$id]);
       }
 
       $this->data[static::FIELD_ID] = (string) $id;
@@ -287,7 +275,7 @@ abstract class AbstractCrudObject extends AbstractObject {
       RequestInterface::METHOD_GET,
       $params);
 
-    $this->setData($response->getContent());
+    $this->setDataWithoutValidation($response->getContent());
     $this->clearHistory();
 
     return $this;
@@ -410,7 +398,7 @@ abstract class AbstractCrudObject extends AbstractObject {
     $object = new $prototype_class(
       null, $this->{static::FIELD_ID}, $this->getApi());
     /** @var AbstractCrudObject $object */
-    $object->setData($response->getContent());
+    $object->setDataWithoutValidation($response->getContent());
 
     return $object;
   }
@@ -456,7 +444,7 @@ abstract class AbstractCrudObject extends AbstractObject {
         .AbstractAsyncJobObject::className());
     }
 
-    return $object->setData($fields)
+    return $object->setDataWithoutValidation($fields)
       ->create($params);
   }
 
@@ -527,7 +515,7 @@ abstract class AbstractCrudObject extends AbstractObject {
     foreach ($response->getContent() as $data) {
       /** @var AbstractObject $object */
       $object = new static(null, null, $api);
-      $object->setData((array) $data);
+      $object->setDataWithoutValidation((array) $data);
       $result[] = $object;
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -24,6 +24,14 @@
 
 namespace FacebookAds\Object;
 
+use FacebookAds\Object\Fields\RateCardFields;
+
 class RateCard extends AbstractObject {
 
+  /**
+   * @return RateCardFields
+   */
+  public static function getFieldsEnum() {
+    return RateCardFields::getInstance();
+  }
 }

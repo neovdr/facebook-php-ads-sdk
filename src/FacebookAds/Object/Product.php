@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -67,7 +67,7 @@ class Product extends AbstractCrudObject {
       array_merge($params, array('fields' => $fields)));
     $response_data = $response->getContent();
     $product = new static($response_data[ProductFields::ID]);
-    $product->setData($response_data);
+    $product->setDataWithoutValidation($response_data);
     return $product;
   }
 
@@ -81,7 +81,7 @@ class Product extends AbstractCrudObject {
   public static function updateProductInCatalogByRetailerId (
     $retailer_id, $catalog_id, array $data = array(), array $params = array()) {
     $product = new static();
-    $product->setData($data);
+    $product->setDataWithoutValidation($data);
 
     $data = Api::instance()->call(
       self::buildCatalogUrlForRetailerId($retailer_id, $catalog_id),

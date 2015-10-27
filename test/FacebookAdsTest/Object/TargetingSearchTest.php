@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -31,7 +31,8 @@ use FacebookAds\Object\Search\TargetingSearchTypes;
 class TargetingSearchTest extends AbstractCrudObjectTestCase {
 
   public function testCrudAccess() {
-    $cursor = TargetingSearch::search(TargetingSearchTypes::CITY, null, 'Lon');
+    $cursor = TargetingSearch::search(
+      TargetingSearchTypes::GEOLOCATION, null, 'Lon');
 
     /* @var $category AbstractCrudObject */
     $result = $cursor->current();

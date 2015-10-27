@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -31,8 +31,7 @@ use FacebookAds\Enum\AbstractEnum;
  */
 class InsightsLevels extends AbstractEnum {
 
-  const ACCOUNT = 'account';
-  const ADGROUP = 'adgroup';
+  const AD = 'ad';
+  const ADSET = 'adset';
   const CAMPAIGN = 'campaign';
-  const CAMPAIGN_GROUP = 'campaign_group';
 }

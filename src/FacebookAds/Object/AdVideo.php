@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -32,8 +32,6 @@ use FacebookAds\Object\Traits\FieldValidation;
 
 class AdVideo extends AbstractCrudObject {
   use FieldValidation;
-  use CannotDelete;
-  use CannotUpdate;
 
   /**
    * @return string
@@ -71,4 +69,16 @@ class AdVideo extends AbstractCrudObject {
 
     return $this;
   }
+
+  /**
+   * @param array $fields
+   * @param array $params
+   * @return Cursor
+   */
+  public function getVideoThumbnails(
+    array $fields = array(), array $params = array()) {
+    return $this->getManyByConnection(
+      VideoThumbnail::className(), $fields, $params, 'thumbnails');
+  }
+
 }

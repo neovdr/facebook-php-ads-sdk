@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -44,7 +44,9 @@ class AdVideoTest extends AbstractCrudObjectTestCase
     $video->{AdVideoFields::SOURCE} = $this->getConfig()->testVideoPath;
     $this->assertCanCreate($video);
     $this->assertCanRead($video);
-    $this->assertCannotUpdate($video);
-    $this->assertCannotDelete($video);
+    $this->assertCanUpdate($video, array(
+      AdVideoFields::NAME => $this->getConfig()->testRunId.' updated',
+    ));
+    $this->assertCanDelete($video);
   }
 }
