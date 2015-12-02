@@ -22,43 +22,40 @@
  *
  */
 
-namespace FacebookAds\Object;
+namespace FacebookAdsTest\Logger\CurlLogger;
 
-use FacebookAds\Cursor;
-use FacebookAds\Object\Fields\AsyncJobFields;
+use FacebookAds\Logger\CurlLogger\JsonNode;
+use FacebookAdsTest\AbstractUnitTestCase;
 
-class AsyncJobInsights extends AbstractAsyncJobObject {
+class JsonNodeTest extends AbstractUnitTestCase {
+  use JsonAwareTestTrait;
 
   /**
-   * @return AsyncJobFields
+   * @dataProvider parameterProvider
+   * @param mixed $param_data
    */
-  public static function getFieldsEnum() {
-    return AsyncJobFields::getInstance();
+  public function testEncoding($param_data) {
+    JsonNode::factory($param_data)->encode();
   }
 
   /**
-   * @return string
+   * @expectedException \InvalidArgumentException
    */
-  protected function getCreateIdFieldName() {
-    return 'report_run_id';
+  public function testInvalidType() {
+    JsonNode::factory(fopen('php://memory', 'r'))->encode();
   }
 
   /**
-   * @return string
+   * Test the sanity check for behaviour on empty children list
+   * which should never happen as this is protected method
    */
-  public function getEndpoint() {
-    return 'insights';
-  }
+  public function testGetLastChildKey() {
+    $object = JsonNode::factory(array());
+    $method = new \ReflectionMethod($object, 'getLastChildKey');
+    $method->setAccessible(true);
 
-  /**
-   * @param array $fields
-   * @param array $params
-   *
-   * @return Cursor
-   */
-  public function getResult(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      Insights::classname(), $fields, $params, $this->getEndpoint());
+    $this->assertNull($method->invoke($object));
+
+    $method->setAccessible(false);
   }
 }

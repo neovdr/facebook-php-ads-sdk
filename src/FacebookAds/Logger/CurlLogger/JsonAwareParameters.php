@@ -22,43 +22,17 @@
  *
  */
 
-namespace FacebookAds\Object;
+namespace FacebookAds\Logger\CurlLogger;
 
-use FacebookAds\Cursor;
-use FacebookAds\Object\Fields\AsyncJobFields;
+use FacebookAds\Http\Parameters;
 
-class AsyncJobInsights extends AbstractAsyncJobObject {
-
-  /**
-   * @return AsyncJobFields
-   */
-  public static function getFieldsEnum() {
-    return AsyncJobFields::getInstance();
-  }
+class JsonAwareParameters extends Parameters {
 
   /**
+   * @param mixed $value
    * @return string
    */
-  protected function getCreateIdFieldName() {
-    return 'report_run_id';
-  }
-
-  /**
-   * @return string
-   */
-  public function getEndpoint() {
-    return 'insights';
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   *
-   * @return Cursor
-   */
-  public function getResult(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      Insights::classname(), $fields, $params, $this->getEndpoint());
+  protected function exportNonScalar($value) {
+    return JsonNode::factory($value)->encode();
   }
 }

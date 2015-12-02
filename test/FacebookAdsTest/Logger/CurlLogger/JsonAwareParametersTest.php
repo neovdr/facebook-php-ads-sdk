@@ -22,43 +22,21 @@
  *
  */
 
-namespace FacebookAds\Object;
+namespace FacebookAdsTest\Logger\CurlLogger;
 
-use FacebookAds\Cursor;
-use FacebookAds\Object\Fields\AsyncJobFields;
+use FacebookAds\Logger\CurlLogger\JsonAwareParameters;
+use FacebookAdsTest\AbstractUnitTestCase;
 
-class AsyncJobInsights extends AbstractAsyncJobObject {
-
-  /**
-   * @return AsyncJobFields
-   */
-  public static function getFieldsEnum() {
-    return AsyncJobFields::getInstance();
-  }
+class JsonAwareParametersTest extends AbstractUnitTestCase {
+  use JsonAwareTestTrait;
 
   /**
-   * @return string
+   * @dataProvider parameterProvider
+   * @param mixed $param_data
    */
-  protected function getCreateIdFieldName() {
-    return 'report_run_id';
-  }
-
-  /**
-   * @return string
-   */
-  public function getEndpoint() {
-    return 'insights';
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   *
-   * @return Cursor
-   */
-  public function getResult(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      Insights::classname(), $fields, $params, $this->getEndpoint());
+  public function testExtract($param_data) {
+    foreach ((new JsonAwareParameters($param_data))->export() as $param) {
+      $this->assertTrue(is_scalar($param) || is_null($param));
+    }
   }
 }

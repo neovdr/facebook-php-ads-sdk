@@ -24,41 +24,25 @@
 
 namespace FacebookAds\Object;
 
-use FacebookAds\Cursor;
-use FacebookAds\Object\Fields\AsyncJobFields;
+use FacebookAds\Object\Fields\AdPlacePageSetFields;
+use FacebookAds\Object\Traits\CannotDelete;
+use FacebookAds\Object\Traits\FieldValidation;
 
-class AsyncJobInsights extends AbstractAsyncJobObject {
+class AdPlacePageSet extends AbstractCrudObject {
+  use FieldValidation;
+  use CannotDelete;
 
   /**
-   * @return AsyncJobFields
+   * @return string
+   */
+  protected function getEndpoint() {
+    return 'ad_place_page_sets';
+  }
+
+  /**
+   * @return AdPlacePageSetFields
    */
   public static function getFieldsEnum() {
-    return AsyncJobFields::getInstance();
-  }
-
-  /**
-   * @return string
-   */
-  protected function getCreateIdFieldName() {
-    return 'report_run_id';
-  }
-
-  /**
-   * @return string
-   */
-  public function getEndpoint() {
-    return 'insights';
-  }
-
-  /**
-   * @param array $fields
-   * @param array $params
-   *
-   * @return Cursor
-   */
-  public function getResult(
-    array $fields = array(), array $params = array()) {
-    return $this->getManyByConnection(
-      Insights::classname(), $fields, $params, $this->getEndpoint());
+    return AdPlacePageSetFields::getInstance();
   }
 }

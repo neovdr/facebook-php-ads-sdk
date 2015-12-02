@@ -37,4 +37,5 @@ class TemplateDataFields extends AbstractEnum {
   const MESSAGE = 'message';
   const NAME = 'name';
   const MAX_PRODUCT_COUNT = 'max_product_count';
+  const PICTURE = 'picture';
 }
