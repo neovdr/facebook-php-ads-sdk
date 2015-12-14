@@ -22,19 +22,25 @@
  *
  */
 
-namespace FacebookAds\Object\Fields;
+namespace FacebookAds\Object;
 
-use FacebookAds\Enum\AbstractEnum;
+use FacebookAds\Object\Fields\CustomConversionFields;
+use FacebookAds\Object\Traits\CannotDelete;
 
-/**
- * @method static LookalikeAudienceSpecFields getInstance()
- */
-class LookalikeAudienceSpecFields extends AbstractEnum {
+class CustomConversion extends AbstractCrudObject {
+  use CannotDelete;
 
-  const TYPE = 'type';
-  const RATIO = 'ratio';
-  const STARTING_RATIO = 'starting_ratio';
-  const COUNTRY = 'country';
-  const PIXEL_IDS = 'pixel_ids';
-  const CONVERSION_TYPE = 'conversion_type';
+  /**
+   * @return string
+   */
+  protected function getEndpoint() {
+    return 'customconversions';
+  }
+
+  /**
+   * @return CustomConversionFields
+   */
+  public static function getFieldsEnum() {
+    return CustomConversionFields::getInstance();
+  }
 }

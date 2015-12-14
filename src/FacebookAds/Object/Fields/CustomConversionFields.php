@@ -27,14 +27,14 @@ namespace FacebookAds\Object\Fields;
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * @method static LookalikeAudienceSpecFields getInstance()
+ * @method static AdConversionPixelFields getInstance()
  */
-class LookalikeAudienceSpecFields extends AbstractEnum {
+class CustomConversionFields extends AbstractEnum {
 
-  const TYPE = 'type';
-  const RATIO = 'ratio';
-  const STARTING_RATIO = 'starting_ratio';
-  const COUNTRY = 'country';
-  const PIXEL_IDS = 'pixel_ids';
-  const CONVERSION_TYPE = 'conversion_type';
+  const CUSTOM_EVENT_TYPE = 'custom_event_type';
+  const DESCRIPTION = 'description';
+  const ID = 'id';
+  const NAME = 'name';
+  const PIXEL_ID = 'pixel_id';
+  const PIXEL_RULE = 'pixel_rule';
 }
