@@ -22,21 +22,29 @@
  *
  */
 
-namespace FacebookAds\Object\Values;
+namespace FacebookAds\Object\CustomAudienceNormalizers;
 
-use FacebookAds\Enum\AbstractEnum;
+use FacebookAds\Object\CustomAudienceMultiKey;
+use FacebookAds\Object\Fields\CustomAudienceMultikeySchemaFields;
+use FacebookAds\Object\CustomAudienceNormalizers\ValueNormalizerInterface;
 
-/**
- * @method static AdFormats getInstance()
- */
-class AdFormats extends AbstractEnum {
+class StateNormalizer implements ValueNormalizerInterface {
 
-  const RIGHT_COLUMN_STANDARD = 'RIGHT_COLUMN_STANDARD';
-  const DESKTOP_FEED_STANDARD = 'DESKTOP_FEED_STANDARD';
-  const MOBILE_FEED_STANDARD = 'MOBILE_FEED_STANDARD';
-  const MOBILE_BANNER = 'MOBILE_BANNER';
-  const MOBILE_INTERSTITIAL = 'MOBILE_INTERSTITIAL';
-  const MOBILE_FEED_BASIC = 'MOBILE_FEED_BASIC';
-  const MOBILE_NATIVE = 'MOBILE_NATIVE';
-  const INSTAGRAM_STANDARD= 'INSTAGRAM_STANDARD';
+  /**
+   * @param string $key
+   * @param string $key_value
+   * @return boolean
+   */
+  public function shouldNormalize($key, $key_value) {
+    return $key === CustomAudienceMultikeySchemaFields::STATE;
+  }
+
+  /**
+   * @param string $key
+   * @param string $key_value
+   * @return string
+   */
+  public function normalize($key, $key_value) {
+    return preg_replace('/[^a-zA-Z]/', '', strtolower(trim($key_value)));
+  }
 }

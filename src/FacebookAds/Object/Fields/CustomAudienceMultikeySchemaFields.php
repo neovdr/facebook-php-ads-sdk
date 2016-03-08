@@ -22,21 +22,26 @@
  *
  */
 
-namespace FacebookAds\Object\Values;
+namespace FacebookAds\Object\Fields;
 
 use FacebookAds\Enum\AbstractEnum;
 
 /**
- * @method static AdFormats getInstance()
+ * @method static LookalikeAudienceSpecFields getInstance()
  */
-class AdFormats extends AbstractEnum {
+class CustomAudienceMultikeySchemaFields extends AbstractEnum {
 
-  const RIGHT_COLUMN_STANDARD = 'RIGHT_COLUMN_STANDARD';
-  const DESKTOP_FEED_STANDARD = 'DESKTOP_FEED_STANDARD';
-  const MOBILE_FEED_STANDARD = 'MOBILE_FEED_STANDARD';
-  const MOBILE_BANNER = 'MOBILE_BANNER';
-  const MOBILE_INTERSTITIAL = 'MOBILE_INTERSTITIAL';
-  const MOBILE_FEED_BASIC = 'MOBILE_FEED_BASIC';
-  const MOBILE_NATIVE = 'MOBILE_NATIVE';
-  const INSTAGRAM_STANDARD= 'INSTAGRAM_STANDARD';
+  const EMAIL = 'EMAIL';
+  const PHONE = 'PHONE';
+  const GENDER = 'GEN';
+  const BIRTH_YEAR = 'DOBY';
+  const BIRTH_MONTH = 'DOBM';
+  const BIRTH_DATE = 'DOBD';
+  const LAST_NAME = 'LN';
+  const FIRST_NAME = 'FN';
+  const FIRST_NAME_INITIAL = 'FI';
+  const CITY = 'CT';
+  const STATE = 'ST';
+  const ZIP = 'ZIP';
+  const MADID = 'MADID';
 }

@@ -22,21 +22,27 @@
  *
  */
 
-namespace FacebookAds\Object\Values;
+namespace FacebookAds\Http;
 
-use FacebookAds\Enum\AbstractEnum;
+abstract class Util {
 
-/**
- * @method static AdFormats getInstance()
- */
-class AdFormats extends AbstractEnum {
+  /**
+   * Avoid parse_str() for HHVM compatibility
+   * This implementation is not a complete sobstitute, but covers all the
+   * requirements of the Facebook Graph Cursor.
+   *
+   * @see hhvm.hack.disallow_dynamic_var_env_funcs
+   * @param $query_string
+   * @return array
+   */
+  public static function parseUrlQuery($query_string) {
+    $query = array();
+    $pairs = explode('&', $query_string);
+    foreach ($pairs as $pair) {
+      list($key, $value) = explode('=', $pair);
+      $query[$key] = $value;
+    }
 
-  const RIGHT_COLUMN_STANDARD = 'RIGHT_COLUMN_STANDARD';
-  const DESKTOP_FEED_STANDARD = 'DESKTOP_FEED_STANDARD';
-  const MOBILE_FEED_STANDARD = 'MOBILE_FEED_STANDARD';
-  const MOBILE_BANNER = 'MOBILE_BANNER';
-  const MOBILE_INTERSTITIAL = 'MOBILE_INTERSTITIAL';
-  const MOBILE_FEED_BASIC = 'MOBILE_FEED_BASIC';
-  const MOBILE_NATIVE = 'MOBILE_NATIVE';
-  const INSTAGRAM_STANDARD= 'INSTAGRAM_STANDARD';
+    return $query;
+  }
 }
